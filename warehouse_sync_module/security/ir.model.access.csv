@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_warehouse_sync_user,access.warehouse.sync.user,model_warehouse_sync,base.group_user,1,1,1,1
+access_warehouse_sync_log_user,access.warehouse.sync.log.user,model_warehouse_sync_log,base.group_user,1,1,1,1
+access_warehouse_sync_panel_user,access.warehouse.sync.panel.user,model_warehouse_sync_panel,base.group_user,1,1,1,1
+access_warehouse_missing_products_user,access.warehouse.missing.products.user,model_warehouse_missing_products,base.group_user,1,1,1,1
+access_warehouse_unpublished_products_user,access.warehouse.unpublished.products.user,model_warehouse_unpublished_products,base.group_user,1,1,1,1

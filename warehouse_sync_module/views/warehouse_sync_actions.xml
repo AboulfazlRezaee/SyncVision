@@ -1,0 +1,29 @@
+<odoo>
+    <record id="action_open_product_from_log" model="ir.actions.server">
+    <field name="name">Open Product Details</field>
+    <field name="model_id" ref="model_warehouse_sync_log"/>
+    <field name="binding_model_id" ref="model_warehouse_sync_log"/>
+    <field name="state">code</field>
+    <field name="code">
+for record in records:
+    product = None
+    if record.sku:
+        product = env['product.product'].search([('default_code', '=', record.sku)], limit=1)
+    if not product and record.barcode:
+        product = env['product.product'].search([('barcode', '=', record.barcode)], limit=1)
+    
+    if product:
+        action = {
+            'name': 'Product: ' + product.name,
+            'type': 'ir.actions.act_window',
+            'res_model': 'product.product',
+            'res_id': product.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+        break
+    else:
+        raise UserError('No product found with SKU "%s" or barcode "%s"' % (record.sku or '', record.barcode or ''))
+    </field>
+</record>
+</odoo>

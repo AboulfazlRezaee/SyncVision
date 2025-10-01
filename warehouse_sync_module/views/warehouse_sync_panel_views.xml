@@ -1,0 +1,416 @@
+<odoo>
+    <!-- Warehouse Sync Control Panel Form View -->
+    <record id="view_warehouse_sync_panel_form" model="ir.ui.view">
+        <field name="name">warehouse.sync.panel.form</field>
+        <field name="model">warehouse.sync.panel</field>
+        <field name="arch" type="xml">
+            <form string="SyncVision Control Panel" class="syncvision_panel">
+                <header>
+                    <style>
+                        /* SyncVision Panel Styling - Only applies to forms with syncvision_panel class */
+                        .syncvision_panel .o_form_sheet_bg {
+                            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+                        }
+                        
+                        .syncvision_panel .o_form_sheet {
+                            background: white !important;
+                            border-radius: 20px !important;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+                            padding: 30px !important;
+                        }
+                        
+                        /* Header Title Styling - Only for SyncVision */
+                        .syncvision_panel .oe_title h1 {
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                            -webkit-background-clip: text !important;
+                            -webkit-text-fill-color: transparent !important;
+                            background-clip: text !important;
+                            font-weight: 700 !important;
+                            font-size: 2.5em !important;
+                            text-align: center !important;
+                            margin-bottom: 20px !important;
+                        }
+                        
+                        /* Group Styling - Only for SyncVision */
+                        .syncvision_panel .o_group {
+                            background: #f8f9fa !important;
+                            border-radius: 15px !important;
+                            padding: 20px !important;
+                            margin-bottom: 20px !important;
+                            border: 1px solid #e9ecef !important;
+                        }
+                        
+                        .syncvision_panel .o_group .o_group_col_6 {
+                            background: white !important;
+                            border-radius: 10px !important;
+                            padding: 15px !important;
+                            margin: 5px !important;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+                        }
+                        
+                        /* Field Labels - Only for SyncVision */
+                        .syncvision_panel .o_form_label {
+                            font-weight: 600 !important;
+                            color: #495057 !important;
+                            font-size: 0.9em !important;
+                        }
+                        
+                        /* Field Values - Only for SyncVision */
+                        .syncvision_panel .o_field_widget {
+                            font-weight: 500 !important;
+                            padding: 5px 10px !important;
+                            border-radius: 5px !important;
+                        }
+                        
+                        /* Button Styling */
+                        .o_form_button_sync {
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                            border: none !important;
+                            color: white !important;
+                            padding: 15px 30px !important;
+                            border-radius: 30px !important;
+                            font-weight: 700 !important;
+                            text-transform: uppercase !important;
+                            letter-spacing: 1.5px !important;
+                            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+                            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+                            font-size: 14px !important;
+                        }
+                        
+                        .o_form_button_sync:hover {
+                            transform: translateY(-3px) scale(1.05) !important;
+                            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6) !important;
+                            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+                        }
+                        
+                        .o_form_button_refresh {
+                            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+                            border: none !important;
+                            color: white !important;
+                            padding: 15px 30px !important;
+                            border-radius: 30px !important;
+                            font-weight: 700 !important;
+                            text-transform: uppercase !important;
+                            letter-spacing: 1.5px !important;
+                            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4) !important;
+                            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+                            font-size: 14px !important;
+                        }
+                        
+                        .o_form_button_refresh:hover {
+                            transform: translateY(-3px) scale(1.05) !important;
+                            box-shadow: 0 15px 35px rgba(17, 153, 142, 0.6) !important;
+                            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%) !important;
+                        }
+                        
+                        /* Card Styling - Only for SyncVision */
+                        .syncvision_panel .card {
+                            border-radius: 15px !important;
+                            border: none !important;
+                            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+                            transition: all 0.3s ease !important;
+                            overflow: hidden !important;
+                        }
+                        
+                        .syncvision_panel .card:hover {
+                            transform: translateY(-5px) !important;
+                            box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
+                        }
+                        
+                        .syncvision_panel .card-body {
+                            padding: 25px !important;
+                        }
+                        
+                        .syncvision_panel .card h4 {
+                            font-weight: 700 !important;
+                            margin-bottom: 10px !important;
+                        }
+                        
+                        /* Button Cards - Only for SyncVision */
+                        .syncvision_panel .btn-outline-danger {
+                            border: 2px solid #e74c3c !important;
+                            color: #e74c3c !important;
+                            background: transparent !important;
+                            border-radius: 25px !important;
+                            padding: 10px 20px !important;
+                            font-weight: 600 !important;
+                            transition: all 0.3s ease !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-danger:hover {
+                            background: #e74c3c !important;
+                            color: white !important;
+                            transform: scale(1.05) !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-warning {
+                            border: 2px solid #f39c12 !important;
+                            color: #f39c12 !important;
+                            background: transparent !important;
+                            border-radius: 25px !important;
+                            padding: 10px 20px !important;
+                            font-weight: 600 !important;
+                            transition: all 0.3s ease !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-warning:hover {
+                            background: #f39c12 !important;
+                            color: white !important;
+                            transform: scale(1.05) !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-info {
+                            border: 2px solid #3498db !important;
+                            color: #3498db !important;
+                            background: transparent !important;
+                            border-radius: 25px !important;
+                            padding: 10px 20px !important;
+                            font-weight: 600 !important;
+                            transition: all 0.3s ease !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-info:hover {
+                            background: #3498db !important;
+                            color: white !important;
+                            transform: scale(1.05) !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-primary {
+                            border: 2px solid #667eea !important;
+                            color: #667eea !important;
+                            background: transparent !important;
+                            border-radius: 25px !important;
+                            padding: 10px 20px !important;
+                            font-weight: 600 !important;
+                            transition: all 0.3s ease !important;
+                        }
+                        
+                        .syncvision_panel .btn-outline-primary:hover {
+                            background: #667eea !important;
+                            color: white !important;
+                            transform: scale(1.05) !important;
+                        }
+                        
+                        /* Notebook Styling - Only for SyncVision */
+                        .syncvision_panel .o_notebook {
+                            margin-top: 20px !important;
+                        }
+                        
+                        .syncvision_panel .o_notebook .nav-tabs {
+                            border-bottom: 3px solid #667eea !important;
+                        }
+                        
+                        .syncvision_panel .o_notebook .nav-tabs .nav-link {
+                            border-radius: 15px 15px 0 0 !important;
+                            font-weight: 600 !important;
+                            color: #495057 !important;
+                        }
+                        
+                        .syncvision_panel .o_notebook .nav-tabs .nav-link.active {
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                            color: white !important;
+                            border: none !important;
+                        }
+                        
+                        /* Alert Styling - Only for SyncVision */
+                        .syncvision_panel .alert {
+                            border-radius: 15px !important;
+                            border: none !important;
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+                        }
+                        
+                        .syncvision_panel .alert-info {
+                            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+                            color: #1565c0 !important;
+                        }
+                        
+                        .syncvision_panel .alert-warning {
+                            background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%) !important;
+                            color: #e65100 !important;
+                        }
+                    </style>
+                    <button name="action_manual_sync"
+                            string="🚀 Start Manual Sync"
+                            type="object"
+                            class="btn-primary o_form_button_sync"
+                            confirm="Are you sure you want to run manual sync? This will update all Odoo stock data."/>
+                    <button name="action_refresh_panel"
+                            string="🔄 Refresh Panel"
+                            type="object"
+                            class="btn-secondary o_form_button_refresh"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sync_status" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Sync Information">
+                            <field name="last_sync_date" widget="datetime"/>
+                            <field name="total_products_synced"/>
+                            <field name="missing_products_count"
+                                   decoration-danger="missing_products_count &gt; 0"
+                                   decoration-success="missing_products_count == 0"/>
+                        </group>
+                        <group string=" ">
+                            <field name="alerts_count"
+                                   decoration-danger="alerts_count &gt; 0"
+                                   decoration-success="alerts_count == 0"/>
+                            <field name="unpublished_products_count"
+                                   decoration-warning="unpublished_products_count &gt; 0"
+                                   decoration-success="unpublished_products_count == 0"/>
+                            <field name="high_stock_count"
+                                   decoration-info="high_stock_count &gt; 0"
+                                   decoration-muted="high_stock_count == 0"/>
+                        </group>
+                    </group>
+
+                    <group string="Missing Products Configuration">
+                        <group>
+                            <field name="filter_missing_products"/>
+                        </group>
+                        <group>
+                            <field name="allowed_prefixes" invisible="not filter_missing_products"/>
+                        </group>
+                    </group>
+
+                    <group string="Email Notifications">
+                        <group>
+                            <field name="send_email_report"/>
+                        </group>
+                        <group>
+                            <field name="recipient_email" invisible="not send_email_report" placeholder="your.email@example.com"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Quick Actions">
+                            <!-- First row -->
+                            <div class="row mt16">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fa fa-question-circle fa-3x text-danger mb-3"></i>
+                                            <h4>Missing Products</h4>
+                                            <p class="text-muted">Products from API not found in inventory</p>
+                                            <button name="action_view_missing_products"
+                                                    string="View Missing Products"
+                                                    type="object"
+                                                    class="btn btn-outline-danger"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fa fa-arrow-up fa-3x text-info mb-3"></i>
+                                            <h4>High Stock Products</h4>
+                                            <p class="text-muted">Products with on-hand quantity ≥ 5</p>
+                                            <button name="action_view_high_stock"
+                                                    string="View High Stock"
+                                                    type="object"
+                                                    class="btn btn-outline-info"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- Third row -->
+                            <div class="row mt16">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fa fa-database fa-3x text-primary mb-3"></i>
+                                            <h4>View Sync Logs</h4>
+                                            <p class="text-muted">View all warehouse sync history and details</p>
+                                            <button name="action_view_sync_logs"
+                                                    string="Open Sync Logs"
+                                                    type="object"
+                                                    class="btn btn-outline-primary"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fa fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                                            <h4>Low Stock Alerts</h4>
+                                            <p class="text-muted">View products with low stock warnings</p>
+                                            <button name="action_view_alerts"
+                                                    string="View Alerts"
+                                                    type="object"
+                                                    class="btn btn-outline-warning"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second row for unpublished products -->
+                            <div class="row mt16">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fa fa-eye-slash fa-3x text-warning mb-3"></i>
+                                            <h4>Unpublished Products</h4>
+                                            <p class="text-muted">Products missing SKU or barcode</p>
+                                            <button name="action_view_unpublished_products"
+                                                    string="View Unpublished Products"
+                                                    type="object"
+                                                    class="btn btn-outline-warning"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+
+                        <page string="Instructions">
+                            <div class="alert alert-info">
+                                <h4><i class="fa fa-info-circle"></i> How to Use This Panel</h4>
+                                <ul>
+                                    <li><strong>Manual Sync:</strong> Click to manually trigger warehouse synchronization</li>
+                                    <li><strong>Refresh Panel:</strong> Update the displayed statistics</li>
+                                    <li><strong>View Sync Logs:</strong> See detailed history of all sync operations</li>
+                                    <li><strong>View Alerts:</strong> Check products with low stock warnings</li>
+                                    <li><strong>View Missing Products:</strong> Check products not found in inventory</li>
+                                    <li><strong>View Unpublished Products:</strong> Check products missing SKU or barcode</li>
+                                    <li><strong>View High Stock:</strong> Check products with on-hand quantity ≥ 5</li>
+                                </ul>
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <h4><i class="fa fa-warning"></i> Important Notes</h4>
+                                <ul>
+                                    <li>Manual sync will update stock quantities for all products</li>
+                                    <li>The sync process may take several minutes to complete</li>
+                                    <li>Products with low stock (less than 5 units) will be flagged as alerts</li>
+                                </ul>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the control panel -->
+    <record id="action_warehouse_sync_panel" model="ir.actions.act_window">
+        <field name="name">SyncVision Control Panel</field>
+        <field name="res_model">warehouse.sync.panel</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu item for the control panel -->
+    <menuitem id="menu_warehouse_sync_panel"
+              name="Sync Control Panel"
+              parent="menu_warehouse_sync_root"
+              action="action_warehouse_sync_panel"
+              sequence="5"/>
+</odoo>

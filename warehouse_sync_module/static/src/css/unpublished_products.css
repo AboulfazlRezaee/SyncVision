@@ -1,0 +1,291 @@
+/* SyncVision Styling - Comprehensive styling for all SyncVision models and views */
+/* Compatible with both light and dark themes */
+
+/* Target all SyncVision models by their specific model names - MOST SPECIFIC SELECTORS */
+.o_view_controller[data-view-type="list"] .o_list_table,
+.o_action[data-res-model="warehouse.sync.log"] .o_list_table,
+.o_action[data-res-model="warehouse.missing.products"] .o_list_table,
+.o_action[data-res-model="warehouse.unpublished.products"] .o_list_table,
+.o_action[data-res-model="warehouse.sync.panel"] .o_list_table,
+/* Additional selectors for log views */
+.o_content .o_view_controller .o_list_view .o_list_table,
+.o_action_manager .o_action .o_view_controller .o_list_table,
+body .o_web_client .o_action_manager .o_action .o_list_table,
+/* Target by window title containing SyncVision or warehouse */
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("SyncVision")) .o_list_table,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Logs")) .o_list_table,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Missing")) .o_list_table,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Unpublished")) .o_list_table {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    margin: 10px !important;
+}
+
+/* Beautiful gradient header for all SyncVision tables */
+.o_view_controller[data-view-type="list"] .o_list_table thead,
+.o_action[data-res-model="warehouse.sync.log"] .o_list_table thead,
+.o_action[data-res-model="warehouse.missing.products"] .o_list_table thead,
+.o_action[data-res-model="warehouse.unpublished.products"] .o_list_table thead,
+.o_action[data-res-model="warehouse.sync.panel"] .o_list_table thead,
+/* Additional selectors for log views */
+.o_content .o_view_controller .o_list_view .o_list_table thead,
+.o_action_manager .o_action .o_view_controller .o_list_table thead,
+body .o_web_client .o_action_manager .o_action .o_list_table thead,
+/* Target by window title containing SyncVision or warehouse */
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("SyncVision")) .o_list_table thead,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Logs")) .o_list_table thead,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Missing")) .o_list_table thead,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Unpublished")) .o_list_table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+/* Header styling for all SyncVision tables */
+.o_view_controller[data-view-type="list"] .o_list_table thead th,
+.o_action[data-res-model="warehouse.sync.log"] .o_list_table thead th,
+.o_action[data-res-model="warehouse.missing.products"] .o_list_table thead th,
+.o_action[data-res-model="warehouse.unpublished.products"] .o_list_table thead th,
+.o_action[data-res-model="warehouse.sync.panel"] .o_list_table thead th,
+/* Additional selectors for log views */
+.o_content .o_view_controller .o_list_view .o_list_table thead th,
+.o_action_manager .o_action .o_view_controller .o_list_table thead th,
+body .o_web_client .o_action_manager .o_action .o_list_table thead th,
+/* Target by window title containing SyncVision or warehouse */
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("SyncVision")) .o_list_table thead th,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Logs")) .o_list_table thead th,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Missing")) .o_list_table thead th,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Unpublished")) .o_list_table thead th {
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 15px !important;
+    border: none !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Body cell styling for all SyncVision tables */
+.o_view_controller[data-view-type="list"] .o_list_table tbody td,
+.o_action[data-res-model="warehouse.sync.log"] .o_list_table tbody td,
+.o_action[data-res-model="warehouse.missing.products"] .o_list_table tbody td,
+.o_action[data-res-model="warehouse.unpublished.products"] .o_list_table tbody td,
+.o_action[data-res-model="warehouse.sync.panel"] .o_list_table tbody td,
+/* Additional selectors for log views */
+.o_content .o_view_controller .o_list_view .o_list_table tbody td,
+.o_action_manager .o_action .o_view_controller .o_list_table tbody td,
+body .o_web_client .o_action_manager .o_action .o_list_table tbody td,
+/* Target by window title containing SyncVision or warehouse */
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("SyncVision")) .o_list_table tbody td,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Logs")) .o_list_table tbody td,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Missing")) .o_list_table tbody td,
+.o_action:has(.o_control_panel .breadcrumb .breadcrumb-item:contains("Unpublished")) .o_list_table tbody td {
+    padding: 12px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Dark theme specific border colors */
+.o_dark .o_view_controller[data-view-type="list"] .o_list_table tbody td,
+.o_dark .o_action[data-res-model="warehouse.sync.log"] .o_list_table tbody td,
+.o_dark .o_action[data-res-model="warehouse.missing.products"] .o_list_table tbody td,
+.o_dark .o_action[data-res-model="warehouse.unpublished.products"] .o_list_table tbody td,
+.o_dark .o_action[data-res-model="warehouse.sync.panel"] .o_list_table tbody td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Alternating row colors for all SyncVision tables - Theme adaptive */
+.o_view_controller[data-view-type="list"] .o_list_table tbody tr:nth-child(even),
+.o_action[data-res-model="warehouse.sync.log"] .o_list_table tbody tr:nth-child(even),
+.o_action[data-res-model="warehouse.missing.products"] .o_list_table tbody tr:nth-child(even),
+.o_action[data-res-model="warehouse.unpublished.products"] .o_list_table tbody tr:nth-child(even),
+.o_action[data-res-model="warehouse.sync.panel"] .o_list_table tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Dark theme specific alternating rows */
+.o_dark .o_view_controller[data-view-type="list"] .o_list_table tbody tr:nth-child(even),
+.o_dark .o_action[data-res-model="warehouse.sync.log"] .o_list_table tbody tr:nth-child(even),
+.o_dark .o_action[data-res-model="warehouse.missing.products"] .o_list_table tbody tr:nth-child(even),
+.o_dark .o_action[data-res-model="warehouse.unpublished.products"] .o_list_table tbody tr:nth-child(even),
+.o_dark .o_action[data-res-model="warehouse.sync.panel"] .o_list_table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Hover effects for all SyncVision tables - Theme adaptive */
+.o_view_controller[data-view-type="list"] .o_list_table tbody tr:hover,
+.o_action[data-res-model="warehouse.sync.log"] .o_list_table tbody tr:hover,
+.o_action[data-res-model="warehouse.missing.products"] .o_list_table tbody tr:hover,
+.o_action[data-res-model="warehouse.unpublished.products"] .o_list_table tbody tr:hover,
+.o_action[data-res-model="warehouse.sync.panel"] .o_list_table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1) !important;
+    transform: scale(1.01) !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Dark theme specific hover effects */
+.o_dark .o_view_controller[data-view-type="list"] .o_list_table tbody tr:hover,
+.o_dark .o_action[data-res-model="warehouse.sync.log"] .o_list_table tbody tr:hover,
+.o_dark .o_action[data-res-model="warehouse.missing.products"] .o_list_table tbody tr:hover,
+.o_dark .o_action[data-res-model="warehouse.unpublished.products"] .o_list_table tbody tr:hover,
+.o_dark .o_action[data-res-model="warehouse.sync.panel"] .o_list_table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.15) !important;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Additional fallback selectors for broader coverage */
+.o_action[data-menu-xmlid*="warehouse_sync_module"] .o_list_table,
+.o_action[data-menu-xmlid*="syncvision"] .o_list_table,
+.o_view_controller .o_list_table[data-model*="warehouse"] {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* Dark theme specific box shadows */
+.o_dark .o_action[data-menu-xmlid*="warehouse_sync_module"] .o_list_table,
+.o_dark .o_action[data-menu-xmlid*="syncvision"] .o_list_table,
+.o_dark .o_view_controller .o_list_table[data-model*="warehouse"] {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+}
+
+.o_action[data-menu-xmlid*="warehouse_sync_module"] .o_list_table thead,
+.o_action[data-menu-xmlid*="syncvision"] .o_list_table thead,
+.o_view_controller .o_list_table[data-model*="warehouse"] thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.o_action[data-menu-xmlid*="warehouse_sync_module"] .o_list_table thead th,
+.o_action[data-menu-xmlid*="syncvision"] .o_list_table thead th,
+.o_view_controller .o_list_table[data-model*="warehouse"] thead th {
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 15px !important;
+    border: none !important;
+    text-align: center !important;
+}
+
+.o_action[data-menu-xmlid*="warehouse_sync_module"] .o_list_table tbody td,
+.o_action[data-menu-xmlid*="syncvision"] .o_list_table tbody td,
+.o_view_controller .o_list_table[data-model*="warehouse"] tbody td {
+    padding: 12px !important;
+    text-align: center !important;
+}
+
+/* Special styling for status fields */
+.o_list_table .o_field_selection,
+.o_list_table .o_field_badge {
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    padding: 5px 12px !important;
+}
+
+/* Alert/Warning styling for low stock items */
+.o_list_table tr[data-alert="true"] {
+    background-color: #fff3cd !important;
+    border-left: 4px solid #ffc107 !important;
+}
+
+.o_list_table tr[data-alert="true"]:hover {
+    background-color: #ffeaa7 !important;
+}
+
+/* Success styling for high stock items */
+.o_list_table tr[data-alert="false"] {
+    border-left: 4px solid #28a745 !important;
+}
+
+/* UNIVERSAL FALLBACK SELECTORS - MOST AGGRESSIVE APPROACH FOR LOGS */
+/* These will catch any list view that might be missed by the above selectors */
+
+/* Target any list table in actions that contain warehouse sync terms */
+.o_action .o_list_table:has(th:contains("SKU")),
+.o_action .o_list_table:has(th:contains("Brand")),
+.o_action .o_list_table:has(th:contains("Quantity")),
+.o_action .o_list_table:has(th:contains("Alert")),
+.o_action .o_list_table:has(th:contains("Note")) {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    margin: 10px !important;
+}
+
+.o_action .o_list_table:has(th:contains("SKU")) thead,
+.o_action .o_list_table:has(th:contains("Brand")) thead,
+.o_action .o_list_table:has(th:contains("Quantity")) thead,
+.o_action .o_list_table:has(th:contains("Alert")) thead,
+.o_action .o_list_table:has(th:contains("Note")) thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.o_action .o_list_table:has(th:contains("SKU")) thead th,
+.o_action .o_list_table:has(th:contains("Brand")) thead th,
+.o_action .o_list_table:has(th:contains("Quantity")) thead th,
+.o_action .o_list_table:has(th:contains("Alert")) thead th,
+.o_action .o_list_table:has(th:contains("Note")) thead th {
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 15px !important;
+    border: none !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.o_action .o_list_table:has(th:contains("SKU")) tbody td,
+.o_action .o_list_table:has(th:contains("Brand")) tbody td,
+.o_action .o_list_table:has(th:contains("Quantity")) tbody td,
+.o_action .o_list_table:has(th:contains("Alert")) tbody td,
+.o_action .o_list_table:has(th:contains("Note")) tbody td {
+    padding: 12px !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* NUCLEAR OPTION - Apply to ALL list tables (use with caution) */
+/* Uncomment these if the above selectors still don't work */
+/*
+.o_list_table {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    margin: 10px !important;
+}
+
+.o_list_table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.o_list_table thead th {
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 15px !important;
+    border: none !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.o_list_table tbody td {
+    padding: 12px !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.o_list_table tbody tr:nth-child(even) {
+    background-color: #f8f9fa !important;
+}
+
+.o_list_table tbody tr:hover {
+    background-color: #e3f2fd !important;
+    transform: scale(1.01) !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+*/

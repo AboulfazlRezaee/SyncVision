@@ -1,0 +1,105 @@
+<odoo>
+    <!-- Action for the unpublished products list -->
+    <record id="action_warehouse_unpublished_products" model="ir.actions.act_window">
+        <field name="name">Unpublished Products</field>
+        <field name="res_model">warehouse.unpublished.products</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No unpublished products found. Run a sync to see all unpublished products here.
+            </p>
+            <p>This log shows ALL products that are unpublished for any reason including:</p>
+            <ul>
+                <li>Missing SKU</li>
+                <li>Missing Barcode</li>
+                <li>Missing both SKU and Barcode</li>
+                <li>Other unpublishing reasons</li>
+            </ul>
+        </field>
+    </record>
+
+    <!-- List view for unpublished products -->
+    <record id="view_warehouse_unpublished_products_list" model="ir.ui.view">
+        <field name="name">warehouse.unpublished.products.list</field>
+        <field name="model">warehouse.unpublished.products</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sync_date" string="Sync Date" widget="date" class="text-center" options="{'format': 'YYYY-MM-DD HH:mm'}"/>
+                <field name="brand" string="Brand" class="text-center"/>
+                <field name="sku" string="SKU" class="text-center"/>
+                <field name="barcode" string="Barcode" class="text-center"/>
+                <field name="quantity" string="Qty" class="text-center"/>
+                <field name="missing_fields" string="Missing Fields" class="text-center"/>
+                <field name="product_name" string="Product Name" class="text-center"/>
+                <button name="action_open_product" type="object" string="Open Product" 
+                        class="btn-primary" invisible="product_id == False"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view for unpublished products -->
+    <record id="view_warehouse_unpublished_products_form" model="ir.ui.view">
+        <field name="name">warehouse.unpublished.products.form</field>
+        <field name="model">warehouse.unpublished.products</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sku" placeholder="SKU" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Product Information">
+                            <field name="brand" string="Brand" readonly="1"/>
+                            <field name="barcode" string="Barcode" readonly="1"/>
+                            <field name="main_id" string="External ID" readonly="1"/>
+                            <field name="quantity" string="Warehouse Quantity" readonly="1"/>
+                        </group>
+                        <group string="Unpublished Information">
+                            <field name="sync_date" string="Sync Date" readonly="1"/>
+                            <field name="missing_fields" string="Missing Fields" readonly="1"/>
+                            <field name="product_name" string="Product Name" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Details">
+                        <field name="note" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view for unpublished products with SKU search -->
+    <record id="view_warehouse_unpublished_products_search" model="ir.ui.view">
+        <field name="name">warehouse.unpublished.products.search</field>
+        <field name="model">warehouse.unpublished.products</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sku" string="SKU" filter_domain="[('sku','ilike',self)]"/>
+                <field name="brand" string="Brand" filter_domain="[('brand','ilike',self)]"/>
+                <field name="barcode" string="Barcode" filter_domain="[('barcode','ilike',self)]"/>
+                <field name="main_id" string="External ID" filter_domain="[('main_id','ilike',self)]"/>
+                <field name="product_name" string="Product Name" filter_domain="[('product_name','ilike',self)]"/>
+                <separator/>
+                <filter name="missing_sku" string="Missing SKU" domain="[('missing_fields','ilike','SKU')]"/>
+                <filter name="missing_barcode" string="Missing Barcode" domain="[('missing_fields','ilike','barcode')]"/>
+                <filter name="missing_both" string="Missing Both" domain="[('missing_fields','ilike','SKU and barcode')]"/>
+                <filter name="other_reasons" string="Other Reasons" domain="[('missing_fields','=','Other')]"/>
+                <filter name="has_api_data" string="Has API Data" domain="[('quantity','>',0)]"/>
+                <filter name="no_api_data" string="No API Data" domain="[('quantity','=',0)]"/>
+                <separator/>
+                <filter name="today" string="Today" domain="[('sync_date','>=',datetime.datetime.combine(context_today(),datetime.time(0,0,0)))]"/>
+                <filter name="this_week" string="This Week" domain="[('sync_date','>=',datetime.datetime.combine(context_today()-datetime.timedelta(days=7),datetime.time(0,0,0)))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_missing_fields" string="Missing Fields" context="{'group_by':'missing_fields'}"/>
+                    <filter name="group_by_brand" string="Brand" context="{'group_by':'brand'}"/>
+                    <filter name="group_by_date" string="Sync Date" context="{'group_by':'sync_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

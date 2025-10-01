@@ -1,0 +1,121 @@
+<odoo>
+    <!-- Action for missing products list -->
+    <record id="action_warehouse_missing_products" model="ir.actions.act_window">
+        <field name="name">Missing Products from API</field>
+        <field name="res_model">warehouse.missing.products</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_priority_brands': 1}</field>
+        <field name="domain">[('status', '=', 'missing')]</field>
+    </record>
+
+    <!-- Menu item for missing products -->
+    <!--
+    <menuitem id="menu_warehouse_missing_products"
+        name="Missing Products"
+        parent="menu_warehouse_sync_root"
+        action="action_warehouse_missing_products"
+        sequence="15"/>
+    -->
+    <!-- Also add to main inventory menu for visibility -->
+    <menuitem id="menu_inventory_missing_products"
+        name="Missing Products (API)"
+        parent="stock.menu_stock_root"
+        action="action_warehouse_missing_products"
+        sequence="99"/>
+
+    <!-- List view for missing products -->
+    <record id="view_warehouse_missing_products_list" model="ir.ui.view">
+        <field name="name">warehouse.missing.products.list</field>
+        <field name="model">warehouse.missing.products</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="status=='missing'" decoration-success="status=='created'" decoration-muted="status=='ignored'">
+                <field name="create_date" string="Date Found"/>
+                <field name="sku" string="SKU"/>
+                <field name="brand" string="Brand"/>
+                <field name="main_id" string="External ID"/>
+                <field name="barcode" string="Barcode"/>
+                <field name="quantity" string="API Quantity"/>
+                <field name="status" string="Status"/>
+                <field name="note" string="Notes"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view for missing products -->
+    <record id="view_warehouse_missing_products_form" model="ir.ui.view">
+        <field name="name">warehouse.missing.products.form</field>
+        <field name="model">warehouse.missing.products</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_product" 
+                            string="Create Product in Inventory" 
+                            type="object" 
+                            class="btn-primary"
+                            icon="fa-plus"
+                            invisible="status != 'missing'"/>
+                    <button name="action_ignore_product" 
+                            string="Ignore" 
+                            type="object" 
+                            class="btn-secondary"
+                            icon="fa-times"
+                            invisible="status != 'missing'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="missing,created,ignored"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sku" placeholder="SKU" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Product Information from API">
+                            <field name="main_id" string="External ID" readonly="1"/>
+                            <field name="brand" string="Brand" readonly="1"/>
+                            <field name="barcode" string="Barcode" readonly="1"/>
+                            <field name="quantity" string="API Quantity" readonly="1"/>
+                        </group>
+                        <group string="Sync Information">
+                            <field name="create_date" string="Date Found Missing" readonly="1"/>
+                            <field name="sync_date" string="Last Sync Date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view for missing products -->
+    <record id="view_warehouse_missing_products_search" model="ir.ui.view">
+        <field name="name">warehouse.missing.products.search</field>
+        <field name="model">warehouse.missing.products</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sku" string="SKU" filter_domain="[('sku','ilike',self)]"/>
+                <field name="brand" string="Brand" filter_domain="[('brand','ilike',self)]"/>
+                <field name="barcode" string="Barcode" filter_domain="[('barcode','ilike',self)]"/>
+                <field name="main_id" string="External ID" filter_domain="[('main_id','ilike',self)]"/>
+                <separator/>
+               <filter name="priority_brands" string="Priority Brands" domain="[('brand','in',['GREEN LION','PORODO','POWEROLOGY','LEVELO','LEPRESSO'])]"/>
+               <filter name="priority_brands_qty50" string="Priority Brands (Qty >= 50)" domain="[('brand','in',['GREEN LION','PORODO','POWEROLOGY','LEVELO','LEPRESSO']), ('quantity','>=', 50)]"/>
+                <separator/>
+                <filter name="status_missing" string="Missing" domain="[('status','=','missing')]"/>
+                <filter name="status_created" string="Created" domain="[('status','=','created')]"/>
+                <filter name="status_ignored" string="Ignored" domain="[('status','=','ignored')]"/>
+                <separator/>
+                <filter name="today" string="Found Today" domain="[('create_date','>=',datetime.datetime.combine(context_today(),datetime.time(0,0,0)))]"/>
+                <filter name="this_week" string="This Week" domain="[('create_date','>=',datetime.datetime.combine(context_today()-datetime.timedelta(days=7),datetime.time(0,0,0)))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_brand" string="Brand" context="{'group_by':'brand'}"/>
+                    <filter name="group_by_status" string="Status" context="{'group_by':'status'}"/>
+                    <filter name="group_by_date" string="Date Found" context="{'group_by':'create_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
