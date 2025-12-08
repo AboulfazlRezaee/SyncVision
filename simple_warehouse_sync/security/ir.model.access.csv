@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_simple_warehouse_sync_user,access.simple.warehouse.sync.user,model_simple_warehouse_sync,base.group_user,1,1,1,1
+access_simple_warehouse_sync_log_user,access.simple.warehouse.sync.log.user,model_simple_warehouse_sync_log,base.group_user,1,1,1,1
+access_simple_warehouse_sync_line_user,access.simple.warehouse.sync.line.user,model_simple_warehouse_sync_line,base.group_user,1,0,0,0

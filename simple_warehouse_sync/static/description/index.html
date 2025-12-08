@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncVision - Advanced Warehouse Synchronization Module</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+        }
+        .header h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .header .tagline {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+        .version-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .intro {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            border-left: 5px solid #667eea;
+        }
+        .intro p {
+            font-size: 1.15em;
+            margin: 0;
+            color: #555;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        .feature-card h3 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .feature-card .icon {
+            font-size: 1.8em;
+            margin-right: 12px;
+        }
+        .feature-card p {
+            color: #666;
+            margin: 0;
+            line-height: 1.7;
+        }
+        .feature-card ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+            color: #666;
+        }
+        .feature-card ul li {
+            margin-bottom: 8px;
+        }
+        .benefits {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .benefits h3 {
+            color: #2c3e50;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .benefits ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .benefits ul li {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .benefits ul li:before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-right: 12px;
+        }
+        .use-cases {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #ffc107;
+            margin-top: 30px;
+        }
+        .use-cases h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        .use-cases ul {
+            color: #856404;
+            margin: 0;
+            padding-left: 25px;
+        }
+        .use-cases ul li {
+            margin-bottom: 10px;
+        }
+        .tech-specs {
+            background: #e7f3ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .tech-specs h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+        .tech-specs table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tech-specs table td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .tech-specs table td:first-child {
+            font-weight: bold;
+            color: #0066cc;
+            width: 30%;
+        }
+        .cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .cta h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        .cta p {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            color: #999;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 SyncVision</h1>
+            <p class="tagline">Advanced Warehouse Synchronization Module for Odoo</p>
+            <span class="version-badge">Version 18.0.15.2.0</span>
+        </div>
+
+        <div class="intro">
+            <p>
+                <strong>SyncVision</strong> is a powerful Odoo module designed to seamlessly synchronize your external warehouse 
+                data with Odoo inventory in real-time. Keep your stock levels accurate, monitor low inventory, 
+                and automate your entire warehouse-to-Odoo integration process with comprehensive logging and intelligent reporting.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔄</span> Real-Time Synchronization</h3>
+                    <p>Automatically sync warehouse data with Odoo inventory, ensuring your stock levels are always accurate and up-to-date.</p>
+                    <ul>
+                        <li>Manual one-click sync trigger</li>
+                        <li>Automated scheduled synchronization via cron jobs</li>
+                        <li>Real-time data refresh and panel updates</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📊</span> Comprehensive Logging</h3>
+                    <p>Track every sync operation with detailed logs and monitoring capabilities.</p>
+                    <ul>
+                        <li>Complete sync history with timestamps</li>
+                        <li>Low stock alerts (products < 5 units)</li>
+                        <li>Missing products tracking</li>
+                        <li>Unpublished products monitoring</li>
+                        <li>High stock products overview (≥ 5 units)</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🎯</span> Smart Product Management</h3>
+                    <p>Intelligent product handling based on warehouse rules and configurations.</p>
+                    <ul>
+                        <li>Automatic stock quantity updates</li>
+                        <li>Product publishing/unpublishing based on SKU and barcode</li>
+                        <li>Brand synchronization from external warehouse</li>
+                        <li>External ID mapping for seamless integration</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📧</span> Email Reporting</h3>
+                    <p>Stay informed with automated email reports after each synchronization.</p>
+                    <ul>
+                        <li>Detailed statistics and product summaries</li>
+                        <li>Customizable recipient settings</li>
+                        <li>HTML formatted reports with complete sync data</li>
+                        <li>Error notifications and alerts</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🔍</span> Advanced Search & Filtering</h3>
+                    <p>Find and organize your products with powerful search and filtering tools.</p>
+                    <ul>
+                        <li>Search by SKU, brand, barcode, or external ID</li>
+                        <li>Filter by stock levels and sync dates</li>
+                        <li>Group by various criteria</li>
+                        <li>Product status filtering</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">⚙️</span> Flexible Configuration</h3>
+                    <p>Customize the module to fit your specific business needs.</p>
+                    <ul>
+                        <li>Configurable missing products filtering by SKU prefixes</li>
+                        <li>Customizable sync schedules</li>
+                        <li>Brand-based filtering options</li>
+                        <li>Comprehensive error handling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="benefits">
+            <h3>💡 Benefits of Using SyncVision</h3>
+            <ul>
+                <li>Eliminate manual data entry and human errors</li>
+                <li>Save time with automated synchronization</li>
+                <li>Maintain accurate inventory levels 24/7</li>
+                <li>Prevent stockouts with low stock alerts</li>
+                <li>Improve customer satisfaction with reliable stock data</li>
+                <li>Gain complete visibility over inventory management</li>
+                <li>Streamline warehouse-to-Odoo integration</li>
+                <li>Make data-driven decisions with comprehensive reports</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Perfect For</h2>
+            <div class="use-cases">
+                <h3>Who Should Use SyncVision?</h3>
+                <ul>
+                    <li><strong>E-commerce businesses</strong> with external warehouse management systems</li>
+                    <li><strong>Multi-channel retailers</strong> needing synchronized inventory across platforms</li>
+                    <li><strong>Wholesale distributors</strong> managing large product catalogs</li>
+                    <li><strong>Manufacturing companies</strong> with external inventory tracking</li>
+                    <li><strong>Drop-shipping businesses</strong> requiring real-time stock updates</li>
+                    <li><strong>Any business</strong> that needs reliable warehouse-to-Odoo synchronization</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ How It Works</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">1️⃣</span> Connect</h3>
+                    <p>Configure your external warehouse API connection within the SyncVision settings panel.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">2️⃣</span> Synchronize</h3>
+                    <p>Trigger manual sync or set up automated schedules using the built-in cron job system.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">3️⃣</span> Monitor</h3>
+                    <p>Track all sync operations through the comprehensive Control Panel dashboard with real-time updates.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-specs">
+            <h3>📋 Technical Specifications</h3>
+            <table>
+                <tr>
+                    <td>Module Name:</td>
+                    <td>SyncVision (simple_warehouse_sync)</td>
+                </tr>
+                <tr>
+                    <td>Version:</td>
+                    <td>18.0.15.2.0</td>
+                </tr>
+                <tr>
+                    <td>Category:</td>
+                    <td>Inventory Management</td>
+                </tr>
+                <tr>
+                    <td>License:</td>
+                    <td>OPL-1 (Odoo Proprietary License)</td>
+                </tr>
+                <tr>
+                    <td>Dependencies:</td>
+                    <td>web, stock</td>
+                </tr>
+                <tr>
+                    <td>Author:</td>
+                    <td>Abolfazl Rezaei</td>
+                </tr>
+                <tr>
+                    <td>Odoo Version:</td>
+                    <td>18.0</td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td>€69.00</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>✨ What's Included</h2>
+            <div class="feature-card">
+                <ul>
+                    <li>✅ Complete SyncVision module installation</li>
+                    <li>✅ Control Panel dashboard for monitoring</li>
+                    <li>✅ Automated cron job configuration</li>
+                    <li>✅ Email notification templates</li>
+                    <li>✅ Sync history and logging system</li>
+                    <li>✅ Product management views and filters</li>
+                    <li>✅ Custom JavaScript widgets for circular animations</li>
+                    <li>✅ Security access controls (CSV)</li>
+                    <li>✅ Complete documentation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cta">
+            <h3>Ready to Transform Your Inventory Management?</h3>
+            <p>Get SyncVision today and experience seamless warehouse synchronization!</p>
+            <p style="font-size: 0.9em; margin-top: 20px;">Perfect for businesses that need reliable warehouse-to-Odoo synchronization with complete visibility and control.</p>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 SyncVision by Abolfazl Rezaei | Advanced Warehouse Synchronization for Odoo</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">For support and inquiries, please contact the module author.</p>
+        </div>
+    </div>
+</body>
+</html>

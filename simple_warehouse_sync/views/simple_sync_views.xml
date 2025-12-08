@@ -1,0 +1,477 @@
+<odoo>
+    <!-- SyncVision dashboard form view -->
+    <record id="view_simple_warehouse_sync_form" model="ir.ui.view">
+        <field name="name">syncvision.dashboard.form</field>
+        <field name="model">simple.warehouse.sync</field>
+        <field name="arch" type="xml">
+            <form string="SyncVision" class="simple_sync_dashboard">
+                <header>
+                    <style>
+                        /* Global backend background: apply dark gradient instead of white */
+                        .o_web_client{
+                            background:radial-gradient(1200px 800px at 10% -10%, #1a2363 0%, transparent 38%),
+                                       radial-gradient(1000px 700px at 110% 10%, #111a4d 0%, transparent 42%),
+                                       #060911 !important;
+                        }
+
+                        /* SyncVision form sheet background (inside the panel) */
+                        .simple_sync_dashboard .o_form_sheet_bg{
+                            background:transparent;
+                            padding:26px;
+                            color:#ffffff;
+                        }
+                        .simple_sync_dashboard .o_form_sheet{background:transparent;border:0;box-shadow:none;padding:0;margin:0;color:#ffffff}
+
+                        .simple_sync_dashboard, .simple_sync_dashboard *{color:#ffffff;}
+
+                        .simple_sync_dashboard .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+                        .simple_sync_dashboard .btn{cursor:pointer;border-radius:999px;border:1px solid transparent;padding:10px 16px;font-weight:700;display:inline-flex;gap:8px;align-items:center}
+                        .simple_sync_dashboard .btn-ghost{background:#0b0f1d;border-color:#2b3152;color:#d5dcff}
+                        .simple_sync_dashboard .btn-primary{background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#050816;border-color:transparent;box-shadow:0 6px 18px rgba(96,165,250,.35)}
+                        .simple_sync_dashboard .btn-green{background:#0e2d25;border:1px solid #1d5f4e;color:#b4ffe6}
+
+                        /* Sync Overview circle card (top block) */
+                        .simple_sync_dashboard .circle-card{
+                            position:relative;
+                            margin-bottom:18px;
+                            padding:16px 18px;
+                            border-radius:18px;
+                            background:radial-gradient(circle at top left,#111827,#020617);
+                            border:1px solid #252a45;
+                            box-shadow:0 25px 80px rgba(0,0,0,.5);
+                            overflow:hidden;
+                        }
+                        .simple_sync_dashboard .circle-card::before{
+                            content:"";
+                            position:absolute;
+                            inset:-40%;
+                            background:radial-gradient(circle at 0% 0%,rgba(96,165,250,.18),transparent 55%);
+                            opacity:.85;
+                            pointer-events:none;
+                        }
+                        .simple_sync_dashboard .circle-row{
+                            position:relative;
+                            display:grid;
+                            grid-template-columns:auto minmax(0,1fr);
+                            gap:20px;
+                            align-items:center;
+                            z-index:1;
+                        }
+                        @media (max-width:900px){.simple_sync_dashboard .circle-row{grid-template-columns:1fr;}}
+
+                        .simple_sync_dashboard .circle-main{
+                            position:relative;
+                            width:230px;
+                            height:230px;
+                            border-radius:50%;
+                            background:#050816;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            margin:4px auto;
+                            box-shadow:0 18px 40px rgba(0,0,0,.65);
+                        }
+                        .simple_sync_dashboard .circle-main::before{
+                            content:"";
+                            position:absolute;
+                            inset:18px;
+                            border-radius:50%;
+                            background:radial-gradient(circle at 30% 0,rgba(96,165,250,.35),transparent 70%);
+                            opacity:.9;
+                        }
+                        .simple_sync_dashboard .circle-ring{
+                            position:absolute;
+                            inset:12px;
+                            border-radius:50%;
+                            background:conic-gradient(#34d399 0deg 140deg,#f97316 140deg 200deg,#facc15 200deg 260deg,#60a5fa 260deg 320deg,#ff6b6b 320deg 360deg);
+                            z-index:1;
+                        }
+                        .simple_sync_dashboard .circle-inner{
+                            position:absolute;
+                            inset:58px;
+                            border-radius:50%;
+                            background:#050816;
+                            box-shadow:0 0 0 1px #1f2937;
+                            display:flex;
+                            flex-direction:column;
+                            align-items:center;
+                            justify-content:center;
+                            text-align:center;
+                            padding:0 10px;
+                            z-index:2;
+                        }
+                        .simple_sync_dashboard .inner-label{font-size:11px;color:#a7b0c0;text-transform:uppercase;letter-spacing:.08em}
+                        .simple_sync_dashboard .inner-value{font-size:26px;font-weight:800;margin-top:4px}
+                        .simple_sync_dashboard .inner-sub{font-size:11px;color:#a7b0c0;margin-top:2px}
+
+                        .simple_sync_dashboard .circle-meta-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+                        .simple_sync_dashboard .circle-last-label{font-size:11px;color:#a7b0c0}
+                        .simple_sync_dashboard .circle-last-value{font-size:13px;font-weight:600}
+                        .simple_sync_dashboard .circle-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;margin-top:4px}
+                        @media (max-width:600px){.simple_sync_dashboard .circle-legend{grid-template-columns:1fr}}
+                        .simple_sync_dashboard .legend-row{display:flex;align-items:center;gap:8px;font-size:12px}
+                        .simple_sync_dashboard .legend-dot{width:10px;height:10px;border-radius:50%}
+                        .simple_sync_dashboard .legend-label{flex:1 1 auto;color:#a7b0c0}
+                        .simple_sync_dashboard .legend-value{font-weight:700}
+                        .simple_sync_dashboard .legend-pub{background:#34d399}
+                        .simple_sync_dashboard .legend-unpub{background:#f97316}
+                        .simple_sync_dashboard .legend-low{background:#facc15}
+                        .simple_sync_dashboard .legend-high{background:#60a5fa}
+                        .simple_sync_dashboard .legend-missing{background:#ff6b6b}
+
+                        .simple_sync_dashboard .section-title{font-size:12px;color:#ffffff;text-transform:uppercase;letter-spacing:.35px;margin:2px 0 8px}
+                        .simple_sync_dashboard .line{height:1px;background:linear-gradient(90deg,transparent,#2a3150,transparent);margin:10px 0}
+
+                        .simple_sync_dashboard .summary{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+                        @media (max-width:1000px){.simple_sync_dashboard .summary{grid-template-columns:1fr}}
+                        .simple_sync_dashboard .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+                        @media (max-width:720px){.simple_sync_dashboard .stats{grid-template-columns:repeat(2,1fr)}}
+                        .simple_sync_dashboard .stat{background:#0b1022;border:1px solid #252a45;border-radius:14px;padding:14px}
+                        .simple_sync_dashboard .stat .k{color:#ffffff;font-size:12px}
+                        .simple_sync_dashboard .stat .v{font-size:20px;font-weight:800;margin-top:6px}
+                        .simple_sync_dashboard .stat.ok{background:#0e2d25;border-color:#1d5f4e}
+                        .simple_sync_dashboard .stat.warn{background:#2b2410;border-color:#5f4b1d}
+                        .simple_sync_dashboard .stat.info{background:#0c1e33;border-color:#2f5b9a}
+
+                        .simple_sync_dashboard .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+                        @media (max-width:900px){.simple_sync_dashboard .grid2{grid-template-columns:1fr}}
+                        .simple_sync_dashboard .field{display:grid;gap:6px}
+                        .simple_sync_dashboard .label{font-size:12px;color:#ffffff}
+                        .simple_sync_dashboard .input{background:#0b1022;border:1px solid #242a49;color:#e9edf6;border-radius:12px;padding:10px 12px;outline:none}
+                        .simple_sync_dashboard .tabs{display:flex;gap:8px;margin-top:10px}
+                        .simple_sync_dashboard .tab{font-weight:700;padding:8px 12px;border-radius:10px;border:1px solid #2b3152;background:#0b0f1d;color:#d5dcff}
+                        .simple_sync_dashboard .tab.active{background:linear-gradient(135deg,#a78bfa,#60a5fa);color:#061224;border-color:transparent}
+
+                        .simple_sync_dashboard .sv-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+                        @media (max-width:900px){.simple_sync_dashboard .sv-quick-grid{grid-template-columns:1fr}}
+                        .simple_sync_dashboard .sv-quick{display:grid;grid-template-columns:4px minmax(0,1fr);border-radius:14px;background:#0d1224;border:1px solid #252a45;box-shadow:0 18px 50px rgba(0,0,0,.35);overflow:hidden}
+                        .simple_sync_dashboard .sv-quick--unpub{grid-column:1/-1}
+                        .simple_sync_dashboard .sv-quick__bar{background:linear-gradient(180deg,#a78bfa,#60a5fa)}
+                        .simple_sync_dashboard .sv-quick--critical .sv-quick__bar{background:linear-gradient(180deg,#f97373,#991b1b)}
+                        .simple_sync_dashboard .sv-quick--warning .sv-quick__bar{background:linear-gradient(180deg,#facc15,#92400e)}
+                        .simple_sync_dashboard .sv-quick--info .sv-quick__bar{background:linear-gradient(180deg,#60a5fa,#1d4ed8)}
+                        .simple_sync_dashboard .sv-quick--neutral .sv-quick__bar{background:linear-gradient(180deg,#9ca3af,#4b5563)}
+                        .simple_sync_dashboard .sv-quick--unpub .sv-quick__bar{background:linear-gradient(180deg,#fbbf24,#854d0e)}
+                        .simple_sync_dashboard .sv-quick__body{padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+                        .simple_sync_dashboard .sv-quick__header .o_statusbar_buttons{display:flex;justify-content:space-between;align-items:center;gap:8px; width:100%;}
+                        .simple_sync_dashboard .sv-quick__header h3{margin:0;font-size:14px;font-weight:700}
+                        .simple_sync_dashboard .sv-quick__header-right{display:flex;align-items:center;gap:8px}
+                        .simple_sync_dashboard .sv-quick__body p{margin:0;font-size:13px;color:#ffffff}
+                        .simple_sync_dashboard .sv-quick__footer{margin-top:6px;display:flex;justify-content:flex-end;gap:8px}
+                        .simple_sync_dashboard .sv-pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid #2b3152;background:#0b0f1d;color:#e5e7ff}
+                        .simple_sync_dashboard .sv-pill--critical{border-color:#7f1d1d;background:#45101a;color:#fecaca}
+                        .simple_sync_dashboard .sv-pill--warning{border-color:#854d0e;background:#422006;color:#fef3c7}
+                        .simple_sync_dashboard .sv-pill--info{border-color:#1d4ed8;background:#0b1120;color:#dbeafe}
+                        .simple_sync_dashboard .sv-btn{border-radius:999px;padding:8px 14px;border:1px solid #2b3152;background:#0b0f1d;color:#e5e7ff;font-size:13px;font-weight:700}
+                        .simple_sync_dashboard .sv-btn--primary{background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#050816;border-color:transparent;box-shadow:0 6px 18px rgba(96,165,250,.35)}
+
+                        /* Settings layout */
+                        .simple_sync_dashboard .sv-settings{display:flex;flex-direction:column;gap:14px}
+                        .simple_sync_dashboard .sv-settings__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+                        .simple_sync_dashboard .sv-card{background:#0d1224;border-radius:14px;border:1px solid #252a45;padding:12px 14px;box-shadow:0 15px 45px rgba(0,0,0,.35)}
+                        .simple_sync_dashboard .sv-card h4{margin:0 0 6px 0;font-size:13px;font-weight:700;color:#e5e7ff}
+                        .simple_sync_dashboard .sv-card small{color:#94a3b8;font-size:11px}
+                        .simple_sync_dashboard .sv-card .o_field_widget{width:100%}
+                        .simple_sync_dashboard .sv-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+                        .simple_sync_dashboard .sv-chip{padding:4px 10px;border-radius:10px;border:1px solid #2b3152;background:#0b0f1d;color:#cbd5e1;font-size:12px}
+                        .simple_sync_dashboard .sv-inline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+                        .simple_sync_dashboard .sv-textarea{width:100%;min-height:90px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;font-size:13px;line-height:1.4;background:#0b0f1d;border:1px solid #2b3152;border-radius:10px;color:#e5e7ff;padding:10px;}
+                        .simple_sync_dashboard .sv-health-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+                        .simple_sync_dashboard .sv-health-card{background:#0d1224;border-radius:14px;border:1px solid #252a45;padding:12px 14px;box-shadow:0 15px 45px rgba(0,0,0,.35)}
+                        .simple_sync_dashboard .sv-health-label{font-size:12px;color:#a7b0c0;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+                        .simple_sync_dashboard .sv-health-item{font-size:12px;color:#cbd5e1;line-height:1.5}
+                        .simple_sync_dashboard .sv-health-badge{display:inline-block;padding:4px 10px;border-radius:10px;font-weight:700;font-size:12px}
+                        .simple_sync_dashboard .sv-health-badge.success{background:#0e2d25;border:1px solid #1d5f4e;color:#bbf7d0}
+                        .simple_sync_dashboard .sv-health-badge.fail{background:#3b0c0c;border:1px solid #7f1d1d;color:#fecdd3}
+                        .simple_sync_dashboard .sv-health-wide{background:#0d1224;border-radius:14px;border:1px solid #252a45;box-shadow:0 15px 45px rgba(0,0,0,.35);padding:14px;display:grid;grid-template-columns:2fr 2fr;gap:14px}
+                        @media (max-width:1100px){.simple_sync_dashboard .sv-health-wide{grid-template-columns:1fr;}}
+                        .simple_sync_dashboard .sv-health-status{display:flex;flex-direction:column;gap:8px}
+                        .simple_sync_dashboard .sv-health-title{font-size:12px;color:#a7b0c0;letter-spacing:.04em;text-transform:uppercase}
+                        .simple_sync_dashboard .sv-health-stamp{font-size:12px;color:#cbd5e1;line-height:1.5}
+                        .simple_sync_dashboard .sv-health-kpis{display:none;}
+                        .simple_sync_dashboard .sv-health-chip{display:none;}
+                        .simple_sync_dashboard .sv-health-details{font-size:12px;color:#cbd5e1;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+                        /* Stronger style for the main Sync Information card */
+                        .simple_sync_dashboard .card.pad.sync-info-card{background:#0b1022;border-radius:16px;border:1px solid #2b3125;box-shadow:0 25px 80px rgba(0,0,0,.5);padding:6px 20px 10px 20px}
+                    </style>
+                    <div class="toolbar">
+                        <button name="action_run_sync" type="object" class="btn btn-ghost" string="Start Manual Sync"/>
+                        <button name="action_syncvision_save_settings" type="object" class="btn btn-primary" string="Save Settings"/>
+                        <button name="action_refresh_panel" type="object" class="btn btn-primary" string="Refresh Panel"/>
+                    </div>
+                </header>
+                <sheet>
+                    <div class="circle-card">
+                        <div class="section-title">Sync Overview</div>
+                        <div class="circle-row">
+                            <div class="circle-main">
+                                <div class="circle-ring"></div>
+                                <div class="circle-inner">
+                                    <div class="inner-label">Total</div>
+                                    <div class="inner-value"><span id="sv_total"><field name="total_synced" readonly="1"/></span></div>
+                                    <div class="inner-sub">products in last sync</div>
+                                </div>
+                            </div>
+                            <div class="circle-meta">
+                                <div class="circle-meta-top">
+                                    <span class="circle-last-label">Last Sync</span>
+                                    <span class="circle-last-value"><field name="last_sync_date" readonly="1"/></span>
+                                </div>
+                                <div class="circle-legend">
+                                    <div class="legend-row">
+                                        <span class="legend-dot legend-pub"></span>
+                                        <span class="legend-label">Published</span>
+                                        <span class="legend-value"><span id="sv_pub"><field name="published_count" readonly="1"/></span></span>
+                                    </div>
+                                    <div class="legend-row">
+                                        <span class="legend-dot legend-unpub"></span>
+                                        <span class="legend-label">Unpublished</span>
+                                        <span class="legend-value"><span id="sv_unpub"><field name="unpublished_count" readonly="1"/></span></span>
+                                    </div>
+                                    <div class="legend-row">
+                                        <span class="legend-dot legend-low"></span>
+                                        <span class="legend-label">Low Stock</span>
+                                        <span class="legend-value"><span id="sv_low"><field name="low_stock_count" readonly="1"/></span></span>
+                                    </div>
+                                    <div class="legend-row">
+                                        <span class="legend-dot legend-high"></span>
+                                        <span class="legend-label">High Stock</span>
+                                        <span class="legend-value"><span id="sv_high"><field name="high_stock_count" readonly="1"/></span></span>
+                                    </div>
+                                    <div class="legend-row">
+                                        <span class="legend-dot legend-missing"></span>
+                                        <span class="legend-label">Missing</span>
+                                        <span class="legend-value"><span id="sv_missing"><field name="priority_missing_count" readonly="1"/></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card pad" style="background:#0b1022;border-radius:16px;border:1px solid #2b3125;box-shadow:0 25px 80px rgba(0,0,0,.5);padding:14px 20px 18px 20px;margin-bottom:14px;">
+                        <div class="section-title">SyncVision Settings</div>
+                        <div class="sv-settings">
+                            <div class="sv-settings__grid">
+                                <div class="sv-card">
+                                    <h4>API URL</h4>
+                                    <small>Endpoint providing product data.</small>
+                                    <field name="sync_api_url" placeholder="https://..."/>
+                                </div>
+                                <div class="sv-card">
+                                    <h4>API Token</h4>
+                                    <small>Optional bearer token.</small>
+                                    <field name="sync_api_token" password="True" placeholder="Bearer token (optional)"/>
+                                </div>
+                                <div class="sv-card">
+                                    <h4>API Timeout</h4>
+                                    <small>Seconds before request fails.</small>
+                                    <field name="sync_api_timeout"/>
+                                </div>
+                                <div class="sv-card">
+                                    <h4>Low Stock Threshold</h4>
+                                    <small>Flag items below this quantity.</small>
+                                    <field name="sync_low_stock_threshold"/>
+                                </div>
+                            </div>
+
+                            <div class="sv-card">
+                                <h4>Stock Mapping</h4>
+                                <small>Map API quantities to Odoo quantities. One rule per line: min,max,qty (blank max = no upper bound).</small>
+                                <div class="sv-inline" style="margin-top:6px;">
+                                    <span class="sv-chip">0 to 30 → 0</span>
+                                    <span class="sv-chip">30 to 50 → 2</span>
+                                    <span class="sv-chip">50 to 200 → 5</span>
+                                    <span class="sv-chip">200+ → 10</span>
+                                    <button name="action_syncvision_apply_default_mapping" type="object" class="btn btn-ghost" style="padding:6px 10px;font-size:12px;border-radius:12px;">Use recommended</button>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    <field name="sync_stock_mapping_text" placeholder="0,30,0&#10;30,50,2&#10;50,200,5&#10;200,,10" class="sv-textarea"/>
+                                </div>
+                            </div>
+
+                            <div class="sv-settings__grid">
+                                <div class="sv-card">
+                                    <h4>Priority Brands</h4>
+                                    <small>Comma-separated list used for missing highlights.</small>
+                                    <field name="sync_priority_brands" placeholder="GREEN LION, PORODO"/>
+                                </div>
+                                <div class="sv-card">
+                                    <h4>Ignore Missing SKU Prefixes</h4>
+                                    <small>Skip marking as missing when SKU starts with these prefixes (comma-separated).</small>
+                                    <field name="sync_missing_sku_prefixes" placeholder="TEST,DEV"/>
+                                </div>
+                                <div class="sv-card">
+                                    <h4>Email Recipients</h4>
+                                    <small>Comma/semicolon-separated emails for reports.</small>
+                                    <field name="sync_email_to" placeholder="user@example.com"/>
+                                </div>
+                                <div class="sv-card">
+                                    <h4>Cron Interval</h4>
+                                    <small>Auto-sync cadence and activation.</small>
+                                    <div class="sv-inline">
+                                        <field name="sync_cron_interval_number" class="oe_inline" style="width:70px;"/>
+                                        <field name="sync_cron_interval_type" class="oe_inline"/>
+                                        <div style="margin-left:12px; display:flex; align-items:center; gap:6px;">
+                                            <span style="font-size:12px;color:#cbd5e1;">Active</span>
+                                            <field name="sync_cron_active" class="oe_inline"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card pad sync-info-card">
+                        <div class="section-title">Sync Information</div>
+                        <div class="summary">
+                            <div class="stats">
+                                <div class="stat info">
+                                    <div class="k">Last Sync</div>
+                                    <div class="v"><field name="last_sync_date" readonly="1"/></div>
+                                </div>
+                                <div class="stat">
+                                    <div class="k">Total Products Synced</div>
+                                    <div class="v"><field name="total_synced" readonly="1"/></div>
+                                </div>
+                                <div class="stat ok">
+                                    <div class="k">Low Stock Alerts</div>
+                                    <div class="v"><field name="low_stock_count" readonly="1"/></div>
+                                </div>
+                                <div class="stat warn">
+                                    <div class="k">Unpublished Products</div>
+                                    <div class="v"><field name="unpublished_count" readonly="1"/></div>
+                                </div>
+                            </div>
+                            <div class="sv-health-wide">
+                                <div class="sv-health-status">
+                                    <div class="sv-health-title">API Health</div>
+                                    <div class="sv-health-stamp"><strong>Status:</strong> <field name="latest_api_status_code" readonly="1"/></div>
+                                    <div class="sv-health-stamp"><strong>Latency:</strong> <field name="latest_api_latency_ms" readonly="1"/> ms</div>
+                                </div>
+                                <div class="sv-health-kpis"></div>
+                                <div class="sv-health-status">
+                                    <div class="sv-health-title">Details</div>
+                                    <div class="sv-health-details"><field name="latest_log_message" readonly="1"/></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="line"/>
+
+                        <div class="section-title">Quick Actions</div>
+
+                        <div class="sv-quick-grid">
+                            <!-- Missing Products -->
+                            <article class="sv-quick sv-quick--critical">
+                                <div class="sv-quick__bar"></div>
+                                <div class="sv-quick__body">
+                                    <header class="sv-quick__header">
+                                        <h3>Missing Products</h3>
+                                        <div class="sv-quick__header-right">
+                                            <span class="sv-pill sv-pill--critical"><field name="missing_count" readonly="1"/></span>
+                                            <button name="action_view_missing" type="object" class="sv-btn sv-btn--primary" string="Review"/>
+                                        </div>
+                                    </header>
+                                    <p>Products from API not found in inventory.</p>
+                                </div>
+                            </article>
+
+                            <!-- Low Stock Alerts -->
+                            <article class="sv-quick sv-quick--warning">
+                                <div class="sv-quick__bar"></div>
+                                <div class="sv-quick__body">
+                                    <header class="sv-quick__header">
+                                        <h3>Low Stock Alerts</h3>
+                                        <div class="sv-quick__header-right">
+                                            <span class="sv-pill sv-pill--warning"><field name="low_stock_count" readonly="1"/></span>
+                                            <button name="action_view_low_stock" type="object" class="sv-btn" string="View"/>
+                                        </div>
+                                    </header>
+                                    <p>Products below safety stock level.</p>
+                                </div>
+                            </article>
+
+                            <!-- High Stock Products -->
+                            <article class="sv-quick sv-quick--info">
+                                <div class="sv-quick__bar"></div>
+                                <div class="sv-quick__body">
+                                    <header class="sv-quick__header">
+                                        <h3>High Stock Products</h3>
+                                        <div class="sv-quick__header-right">
+                                            <span class="sv-pill sv-pill--info"><field name="high_stock_count" readonly="1"/></span>
+                                            <button name="action_view_high_stock" type="object" class="sv-btn" string="View"/>
+                                        </div>
+                                    </header>
+                                    <p>On-hand quantity greater than threshold.</p>
+                                </div>
+                            </article>
+
+                            <!-- Sync Logs (per-product for last run) -->
+                            <article class="sv-quick sv-quick--neutral">
+                                <div class="sv-quick__bar"></div>
+                                <div class="sv-quick__body">
+                                    <header class="sv-quick__header">
+                                        <h3>Sync Logs</h3>
+                                        <div class="sv-quick__header-right">
+                                            <button name="action_view_all_lines" type="object" class="sv-btn" string="View"/>
+                                        </div>
+                                    </header>
+                                    <p>Review detailed per-product log for the latest sync.</p>
+                                </div>
+                            </article>
+
+                            <!-- Unpublished Products (wide) -->
+                            <article class="sv-quick sv-quick--unpub">
+                                <div class="sv-quick__bar"></div>
+                                <div class="sv-quick__body">
+                                    <header class="sv-quick__header">
+                                        <h3>Unpublished Products</h3>
+                                        <div class="sv-quick__header-right">
+                                            <span class="sv-pill sv-pill--warning"><field name="unpublished_count" readonly="1"/></span>
+                                            <button name="action_view_unpublished" type="object" class="sv-btn" string="View"/>
+                                        </div>
+                                    </header>
+                                    <p>Products with missing SKU or barcode and not published on any website.</p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Singleton record so the dashboard always has an existing record -->
+    <record id="simple_sync_singleton" model="simple.warehouse.sync"/>
+
+    <!-- Action to open the sync form (singleton) -->
+    <record id="action_simple_warehouse_sync" model="ir.actions.act_window">
+        <field name="name">Run Simple Warehouse Sync</field>
+        <field name="res_model">simple.warehouse.sync</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="res_id" eval="ref('simple_warehouse_sync.simple_sync_singleton')"/>
+        <field name="context">{"create": False}</field>
+    </record>
+
+    <!-- Action to open simple sync log -->
+    <record id="action_simple_warehouse_sync_log" model="ir.actions.act_window">
+        <field name="name">Simple Warehouse Sync Logs</field>
+        <field name="res_model">simple.warehouse.sync.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_simple_warehouse_sync_root"
+              name="SyncVision"
+              sequence="50"
+              web_icon="simple_warehouse_sync,static/description/icon.png"/>
+
+    <menuitem id="menu_simple_warehouse_sync_run"
+              name="SyncVision Panel"
+              parent="menu_simple_warehouse_sync_root"
+              action="action_simple_warehouse_sync"
+              sequence="5"/>
+
+</odoo>

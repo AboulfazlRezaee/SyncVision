@@ -1,0 +1,98 @@
+<odoo>
+    <!-- List view for per-product sync lines (default: shows mapped qty) -->
+    <record id="view_simple_warehouse_sync_line_list" model="ir.ui.view">
+        <field name="name">simple.warehouse.sync.line.list</field>
+        <field name="model">simple.warehouse.sync.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date" string="Sync Date"/>
+                <field name="sku"/>
+                <field name="brand"/>
+                <!-- <field name="external_id"/> -->
+                <field name="barcode"/>
+                <field name="qty" string="Quantity"/>
+                <field name="low_stock" string="Low Stock Alert" widget="boolean_toggle"/>
+                <field name="note" string="Status Note"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- List view specialized for Missing Products: show API qty in Qty column -->
+    <record id="view_simple_missing_products_list" model="ir.ui.view">
+        <field name="name">simple.warehouse.sync.line.missing.list</field>
+        <field name="model">simple.warehouse.sync.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date" string="Sync Date"/>
+                <field name="sku"/>
+                <field name="brand"/>
+                <field name="barcode"/>
+                <field name="api_qty" string="Quantity"/>
+                <field name="note" string="Status Note"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search view for per-product sync lines -->
+    <record id="view_simple_warehouse_sync_line_search" model="ir.ui.view">
+        <field name="name">simple.warehouse.sync.line.search</field>
+        <field name="model">simple.warehouse.sync.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sku"/>
+                <field name="brand"/>
+                <!-- <field name="external_id"/> -->
+                <field name="barcode"/>
+                <separator/>
+                <filter name="low_stock" string="Low Stock" domain="[('low_stock','=',True)]"/>
+                <filter name="high_stock" string="High Stock" domain="[('high_stock','=',True)]"/>
+                <filter name="unpublished" string="Unpublished" domain="[('unpublished','=',True)]"/>
+                <filter name="missing" string="Missing" domain="[('missing','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Extra search view preset focused on missing products within sync lines -->
+    <record id="view_simple_missing_products_search" model="ir.ui.view">
+        <field name="name">simple.warehouse.sync.line.missing.search</field>
+        <field name="model">simple.warehouse.sync.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sku" string="SKU"/>
+                <field name="brand" string="Brand"/>
+                <field name="barcode" string="Barcode"/>
+                <!-- <field name="external_id" string="External ID"/> -->
+                <separator/>
+                <filter name="priority_brands" string="Priority Brands" domain="[('priority_brand','=',True)]"/>
+                <separator/>
+                <filter name="only_missing" string="Missing Products" domain="[('missing','=',True)]"/>
+                <filter name="only_unpublished" string="Unpublished" domain="[('unpublished','=',True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_brand" string="Brand" context="{'group_by':'brand'}"/>
+                    <filter name="group_by_missing" string="Missing" context="{'group_by':'missing'}"/>
+                    <filter name="group_by_date" string="Sync Date" context="{'group_by':'create_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Generic action to open all sync lines (can be reused by methods with different domains) -->
+    <record id="action_simple_warehouse_sync_lines" model="ir.actions.act_window">
+        <field name="name">Simple Warehouse Sync Lines</field>
+        <field name="res_model">simple.warehouse.sync.line</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_simple_warehouse_sync_line_search"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Action dedicated for Missing Products view using the special list + search views -->
+    <record id="action_simple_warehouse_sync_lines_missing" model="ir.actions.act_window">
+        <field name="name">Missing Products (API Only)</field>
+        <field name="res_model">simple.warehouse.sync.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_simple_missing_products_list"/>
+        <field name="search_view_id" ref="view_simple_missing_products_search"/>
+        <field name="context">{}</field>
+    </record>
+</odoo>
