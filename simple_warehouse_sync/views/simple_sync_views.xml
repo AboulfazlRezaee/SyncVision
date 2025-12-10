@@ -294,7 +294,7 @@
                                 <div class="sv-card">
                                     <h4>Priority Brands</h4>
                                     <small>Comma-separated list used for missing highlights.</small>
-                                    <field name="sync_priority_brands" placeholder="GREEN LION, PORODO"/>
+                                    <field name="sync_priority_brands" placeholder="Brand1, Brand2"/>
                                 </div>
                                 <div class="sv-card">
                                     <h4>Ignore Missing SKU Prefixes</h4>

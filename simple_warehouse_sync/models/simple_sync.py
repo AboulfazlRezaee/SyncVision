@@ -49,24 +49,24 @@ class SimpleWarehouseSync(models.Model):
     latest_api_latency_ms = fields.Integer(string="Latest API Latency (ms)", compute="_compute_health_info", store=False)
 
     # User-configurable settings (stored in ir.config_parameter, edited on the dashboard)
-    # IMPORTANT: These are NOT stored fields - they're computed from ir.config_parameter
-    # The inverse method is disabled to prevent auto-save on every keystroke
-    sync_api_url = fields.Char(string="Sync API URL", compute="_compute_settings", readonly=False, store=False)
-    sync_api_token = fields.Char(string="API Token", compute="_compute_settings", readonly=False, store=False)
-    sync_api_timeout = fields.Integer(string="API Timeout (s)", compute="_compute_settings", readonly=False, store=False)
-    sync_stock_mapping = fields.Text(string="Stock Mapping JSON", compute="_compute_settings", readonly=False, store=False)
+    # These fields use compute + inverse to properly capture user changes
+    sync_api_url = fields.Char(string="Sync API URL", compute="_compute_settings", inverse="_inverse_sync_api_url", readonly=False, store=False)
+    sync_api_token = fields.Char(string="API Token", compute="_compute_settings", inverse="_inverse_sync_api_token", readonly=False, store=False)
+    sync_api_timeout = fields.Integer(string="API Timeout (s)", compute="_compute_settings", inverse="_inverse_sync_api_timeout", readonly=False, store=False)
+    sync_stock_mapping = fields.Text(string="Stock Mapping JSON", compute="_compute_settings", inverse="_inverse_sync_stock_mapping", readonly=False, store=False)
     sync_stock_mapping_text = fields.Text(
         string="Stock Mapping (min,max,qty per line)",
         compute="_compute_settings",
+        inverse="_inverse_sync_stock_mapping_text",
         readonly=False,
         store=False,
         help="Enter one rule per line as: min,max,qty (use blank for max to mean no upper bound).",
     )
-    sync_priority_brands = fields.Char(string="Priority Brands", compute="_compute_settings", readonly=False, store=False)
-    sync_missing_sku_prefixes = fields.Char(string="Ignore Missing SKU Prefixes", compute="_compute_settings", readonly=False, store=False)
-    sync_low_stock_threshold = fields.Integer(string="Low Stock Threshold", compute="_compute_settings", readonly=False, store=False)
-    sync_email_to = fields.Char(string="Notification Recipients", compute="_compute_settings", readonly=False, store=False)
-    sync_cron_interval_number = fields.Integer(string="Cron Interval Number", compute="_compute_settings", readonly=False, store=False)
+    sync_priority_brands = fields.Char(string="Priority Brands", compute="_compute_settings", inverse="_inverse_sync_priority_brands", readonly=False, store=False)
+    sync_missing_sku_prefixes = fields.Char(string="Ignore Missing SKU Prefixes", compute="_compute_settings", inverse="_inverse_sync_missing_sku_prefixes", readonly=False, store=False)
+    sync_low_stock_threshold = fields.Integer(string="Low Stock Threshold", compute="_compute_settings", inverse="_inverse_sync_low_stock_threshold", readonly=False, store=False)
+    sync_email_to = fields.Char(string="Notification Recipients", compute="_compute_settings", inverse="_inverse_sync_email_to", readonly=False, store=False)
+    sync_cron_interval_number = fields.Integer(string="Cron Interval Number", compute="_compute_settings", inverse="_inverse_sync_cron_interval_number", readonly=False, store=False)
     sync_cron_interval_type = fields.Selection(
         [
             ("minutes", "Minutes"),
@@ -77,10 +77,14 @@ class SimpleWarehouseSync(models.Model):
         ],
         string="Cron Interval Type",
         compute="_compute_settings",
+        inverse="_inverse_sync_cron_interval_type",
         readonly=False,
         store=False,
     )
-    sync_cron_active = fields.Boolean(string="Enable Auto-sync", compute="_compute_settings", readonly=False, store=False)
+    sync_cron_active = fields.Boolean(string="Enable Auto-sync", compute="_compute_settings", inverse="_inverse_sync_cron_active", readonly=False, store=False)
+
+    # Temporary storage for pending changes (not persisted until Save button is clicked)
+    _pending_settings = {}
 
     def _normalize_sku(self, sku):
         """Normalize SKU by removing non-alphanumerics and uppercasing."""
@@ -199,17 +203,137 @@ class SimpleWarehouseSync(models.Model):
             cron_active_str = blob.get("cron_active") if "cron_active" in blob else icp.get_param("simple_warehouse_sync.cron_active", "True")
             rec.sync_cron_active = str(cron_active_str).lower() in ("true", "1", "yes")
 
-    # Removed _inverse_settings() - settings are only saved via button click now
+    # Inverse methods - store pending changes in record cache until Save button is clicked
+    def _get_pending_key(self, field_name):
+        """Generate a unique key for pending settings storage."""
+        return f"{self.id or 'new'}_{field_name}"
+
+    def _set_pending(self, field_name, value):
+        """Store a pending value for later save."""
+        key = self._get_pending_key(field_name)
+        SimpleWarehouseSync._pending_settings[key] = value
+
+    def _get_pending(self, field_name, default=None):
+        """Get a pending value if it exists."""
+        key = self._get_pending_key(field_name)
+        return SimpleWarehouseSync._pending_settings.get(key, default)
+
+    def _has_pending(self, field_name):
+        """Check if a pending value exists."""
+        key = self._get_pending_key(field_name)
+        return key in SimpleWarehouseSync._pending_settings
+
+    def _clear_pending(self):
+        """Clear all pending settings for this record."""
+        prefix = f"{self.id or 'new'}_"
+        keys_to_remove = [k for k in SimpleWarehouseSync._pending_settings if k.startswith(prefix)]
+        for k in keys_to_remove:
+            del SimpleWarehouseSync._pending_settings[k]
+
+    def _inverse_sync_api_url(self):
+        for rec in self:
+            rec._set_pending('sync_api_url', rec.sync_api_url)
+
+    def _inverse_sync_api_token(self):
+        for rec in self:
+            rec._set_pending('sync_api_token', rec.sync_api_token)
+
+    def _inverse_sync_api_timeout(self):
+        for rec in self:
+            rec._set_pending('sync_api_timeout', rec.sync_api_timeout)
+
+    def _inverse_sync_stock_mapping(self):
+        for rec in self:
+            rec._set_pending('sync_stock_mapping', rec.sync_stock_mapping)
+
+    def _inverse_sync_stock_mapping_text(self):
+        for rec in self:
+            rec._set_pending('sync_stock_mapping_text', rec.sync_stock_mapping_text)
+
+    def _inverse_sync_priority_brands(self):
+        for rec in self:
+            rec._set_pending('sync_priority_brands', rec.sync_priority_brands)
+
+    def _inverse_sync_missing_sku_prefixes(self):
+        for rec in self:
+            rec._set_pending('sync_missing_sku_prefixes', rec.sync_missing_sku_prefixes)
+
+    def _inverse_sync_low_stock_threshold(self):
+        for rec in self:
+            rec._set_pending('sync_low_stock_threshold', rec.sync_low_stock_threshold)
+
+    def _inverse_sync_email_to(self):
+        for rec in self:
+            rec._set_pending('sync_email_to', rec.sync_email_to)
+
+    def _inverse_sync_cron_interval_number(self):
+        for rec in self:
+            rec._set_pending('sync_cron_interval_number', rec.sync_cron_interval_number)
+
+    def _inverse_sync_cron_interval_type(self):
+        for rec in self:
+            rec._set_pending('sync_cron_interval_type', rec.sync_cron_interval_type)
+
+    def _inverse_sync_cron_active(self):
+        for rec in self:
+            rec._set_pending('sync_cron_active', rec.sync_cron_active)
 
     def _persist_settings_from_form(self):
         """Save all form values to system parameters at once (only called when Save button is clicked)."""
         self.ensure_one()
         
         icp = self.env["ir.config_parameter"].sudo()
+
+        # Try to read raw payload data (helps when computed, non-stored fields are not propagated on button click)
+        params = self.env.context.get("params") or {}
+        payload_candidates = []
+        # Odoo may place the form data in different spots depending on the client call stack.
+        payload_candidates.append(params.get("data"))
+        payload_candidates.append(params.get("context", {}).get("data"))
+        payload_candidates.append(self.env.context.get("data"))
+        payload_candidates.append(self.env.context.get("record_data"))
+        for arg in params.get("args") or []:
+            if isinstance(arg, dict):
+                payload_candidates.append(arg)
+        ctx = params.get("context") or {}
+        payload_candidates.append(ctx.get("params", {}).get("data") if isinstance(ctx, dict) else None)
+        payload_data = next((c for c in payload_candidates if c), {}) or {}
+        # Last resort: try the HTTP JSON payload if available
+        try:
+            from odoo.http import request
+
+            if not payload_data and getattr(request, "jsonrequest", None):
+                payload_data = (
+                    request.jsonrequest.get("params", {}).get("data")
+                    or request.jsonrequest.get("params", {}).get("args", [{}])[0]
+                    or {}
+                )
+        except Exception:
+            payload_data = payload_data or {}
+
+        def _get_payload_value(field_name, fallback=None):
+            """Prefer pending value (from inverse), then payload, then record value, then fallback."""
+            # First check pending settings (captured by inverse methods when user edits fields)
+            if self._has_pending(field_name):
+                return self._get_pending(field_name)
+            # Then check posted payload data
+            if field_name in payload_data:
+                return payload_data.get(field_name)
+            # Then try record attribute (will re-compute from saved values)
+            if hasattr(self, field_name):
+                return getattr(self, field_name)
+            return fallback
+
+        def _to_bool(val, default=False):
+            if val is None:
+                return default
+            if isinstance(val, bool):
+                return val
+            return str(val).lower() in ("true", "1", "yes", "y", "on")
         
-        # Load current blob
+        # Load current blob so we can preserve values that are not present in the form payload
         current_blob = self._get_settings_blob()
-        
+
         # If no blob exists yet, initialize with defaults
         if not current_blob:
             current_blob = {
@@ -226,57 +350,69 @@ class SimpleWarehouseSync(models.Model):
                 "cron_active": "True",
             }
         
-        # Build new blob from form values - take ALL values from the form
+        # Build new blob from form values - take ALL values from the form with sensible fallbacks
         new_blob = {}
         
         # API URL
-        new_blob["api_url"] = self.sync_api_url.strip() if self.sync_api_url else current_blob.get("api_url", DEFAULT_API_URL)
+        api_url_val = _get_payload_value("sync_api_url", None)
+        new_blob["api_url"] = api_url_val.strip() if api_url_val else current_blob.get("api_url", DEFAULT_API_URL)
         
         # API Token - empty is valid
-        new_blob["api_token"] = self.sync_api_token if self.sync_api_token is not None else current_blob.get("api_token", "")
+        token_val = _get_payload_value("sync_api_token", None)
+        new_blob["api_token"] = token_val if token_val is not None else current_blob.get("api_token", "")
         
         # API Timeout
         try:
-            timeout = int(self.sync_api_timeout) if self.sync_api_timeout else int(current_blob.get("api_timeout", 60))
+            timeout_val = _get_payload_value("sync_api_timeout", None)
+            timeout = int(timeout_val) if timeout_val not in (None, False) else int(current_blob.get("api_timeout", 60))
             new_blob["api_timeout"] = max(timeout, 1)
         except (ValueError, TypeError):
             new_blob["api_timeout"] = int(current_blob.get("api_timeout", 60))
         
         # Stock mapping
-        if self.sync_stock_mapping_text and str(self.sync_stock_mapping_text).strip():
-            mapping_rules = self._mapping_text_to_json(self.sync_stock_mapping_text)
+        stock_mapping_text = _get_payload_value("sync_stock_mapping_text", None)
+        if stock_mapping_text and str(stock_mapping_text).strip():
+            mapping_rules = self._mapping_text_to_json(stock_mapping_text)
             new_blob["stock_mapping"] = json.dumps(mapping_rules)
         else:
             new_blob["stock_mapping"] = current_blob.get("stock_mapping", json.dumps(DEFAULT_STOCK_MAPPING))
         
         # Priority brands - empty string is valid
-        new_blob["priority_brands"] = self.sync_priority_brands if self.sync_priority_brands is not None else current_blob.get("priority_brands", ",".join(DEFAULT_PRIORITY_BRANDS))
+        priority_val = _get_payload_value("sync_priority_brands", None)
+        new_blob["priority_brands"] = priority_val if priority_val is not None else current_blob.get("priority_brands", ",".join(DEFAULT_PRIORITY_BRANDS))
         
         # Missing SKU prefixes - empty string is valid
-        new_blob["missing_sku_prefixes"] = self.sync_missing_sku_prefixes if self.sync_missing_sku_prefixes is not None else current_blob.get("missing_sku_prefixes", "")
+        missing_pref_val = _get_payload_value("sync_missing_sku_prefixes", None)
+        new_blob["missing_sku_prefixes"] = missing_pref_val if missing_pref_val is not None else current_blob.get("missing_sku_prefixes", "")
         
         # Low stock threshold - 0 is valid
         try:
-            threshold = int(self.sync_low_stock_threshold) if self.sync_low_stock_threshold is not None else int(current_blob.get("low_stock_threshold", 5))
+            low_stock_val = _get_payload_value("sync_low_stock_threshold", None)
+            threshold = int(low_stock_val) if low_stock_val is not None else int(current_blob.get("low_stock_threshold", 5))
             new_blob["low_stock_threshold"] = max(threshold, 0)
         except (ValueError, TypeError):
             new_blob["low_stock_threshold"] = int(current_blob.get("low_stock_threshold", 5))
         
         # Email recipients - empty string is valid
-        new_blob["email_to"] = self.sync_email_to if self.sync_email_to is not None else current_blob.get("email_to", "")
+        email_to_val = _get_payload_value("sync_email_to", None)
+        new_blob["email_to"] = email_to_val if email_to_val is not None else current_blob.get("email_to", "")
         
         # Cron interval number
         try:
-            interval = int(self.sync_cron_interval_number) if self.sync_cron_interval_number else int(current_blob.get("cron_interval_number", 1))
+            interval_val = _get_payload_value("sync_cron_interval_number", None)
+            interval = int(interval_val) if interval_val not in (None, False) else int(current_blob.get("cron_interval_number", 1))
             new_blob["cron_interval_number"] = max(interval, 1)
         except (ValueError, TypeError):
             new_blob["cron_interval_number"] = int(current_blob.get("cron_interval_number", 1))
         
         # Cron interval type
-        new_blob["cron_interval_type"] = self.sync_cron_interval_type if self.sync_cron_interval_type else current_blob.get("cron_interval_type", "days")
+        interval_type_val = _get_payload_value("sync_cron_interval_type", None)
+        new_blob["cron_interval_type"] = interval_type_val if interval_type_val else current_blob.get("cron_interval_type", "days")
         
         # Cron active - boolean
-        new_blob["cron_active"] = "True" if self.sync_cron_active else "False"
+        cron_active_val = _get_payload_value("sync_cron_active", None)
+        cron_active_bool = _to_bool(cron_active_val, default=_to_bool(current_blob.get("cron_active", "True")))
+        new_blob["cron_active"] = "True" if cron_active_bool else "False"
         
         # Save the complete blob
         icp.set_param(SETTINGS_BLOB_KEY, json.dumps(new_blob))
@@ -293,6 +429,11 @@ class SimpleWarehouseSync(models.Model):
         icp.set_param("simple_warehouse_sync.cron_interval_number", str(new_blob["cron_interval_number"]))
         icp.set_param("simple_warehouse_sync.cron_interval_type", new_blob["cron_interval_type"])
         icp.set_param("simple_warehouse_sync.cron_active", new_blob["cron_active"])
+        
+        _logger.info("SyncVision: Settings saved successfully")
+        
+        # Clear pending settings after successful save
+        self._clear_pending()
         
         # Update cron schedule
         self._update_cron_schedule()
