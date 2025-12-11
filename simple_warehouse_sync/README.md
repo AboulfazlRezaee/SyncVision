@@ -272,34 +272,6 @@ grep "SimpleWarehouseSync" /var/log/odoo/odoo.log
 
 ---
 
-## Support
-
-For support, feature requests, or bug reports:
-
-- **Author**: Abolfazl Rezaei
-- **License**: Odoo Proprietary License v1.0 (OPL-1)
-- **Price**: €69.00
-
----
-
-## Changelog
-
-### Version 18.0.15.0
-- Added configurable API field mapping (SKU and Stock field names)
-- Improved documentation and HTML description
-- Enhanced dashboard UI
-
-### Version 18.0.5.0
-- Initial release for Odoo 18
-- Real-time warehouse synchronization
-- Comprehensive dashboard with statistics
-- Configurable stock mapping rules
-- Email reporting with HTML templates
-- Priority brand tracking
-- Automated scheduling via cron jobs
-
----
-
 ## License
 
 This module is licensed under the **Odoo Proprietary License v1.0 (OPL-1)**.
