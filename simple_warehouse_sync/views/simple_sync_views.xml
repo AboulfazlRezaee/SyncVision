@@ -174,7 +174,10 @@
                         .simple_sync_dashboard .sv-card .o_field_widget{width:100%}
                         .simple_sync_dashboard .sv-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
                         .simple_sync_dashboard .sv-chip{padding:4px 10px;border-radius:10px;border:1px solid #2b3152;background:#0b0f1d;color:#cbd5e1;font-size:12px}
-                        .simple_sync_dashboard .sv-inline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+                        .simple_sync_dashboard .sv-inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+                        .simple_sync_dashboard .sv-cron-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+                        .simple_sync_dashboard .sv-cron-row .o_field_widget{width:auto !important;flex-shrink:0}
+                        .simple_sync_dashboard .sv-cron-row input[type="checkbox"]{width:18px;height:18px;margin:0;vertical-align:middle}
                         .simple_sync_dashboard .sv-textarea{width:100%;min-height:90px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;font-size:13px;line-height:1.4;background:#0b0f1d;border:1px solid #2b3152;border-radius:10px;color:#e5e7ff;padding:10px;}
                         .simple_sync_dashboard .sv-health-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
                         .simple_sync_dashboard .sv-health-card{background:#0d1224;border-radius:14px;border:1px solid #252a45;padding:12px 14px;box-shadow:0 15px 45px rgba(0,0,0,.35)}
@@ -194,11 +197,58 @@
 
                         /* Stronger style for the main Sync Information card */
                         .simple_sync_dashboard .card.pad.sync-info-card{background:#0b1022;border-radius:16px;border:1px solid #2b3125;box-shadow:0 25px 80px rgba(0,0,0,.5);padding:6px 20px 10px 20px}
+
+                        /* Dark theme for select dropdowns */
+                        .simple_sync_dashboard select,
+                        .simple_sync_dashboard .o_input_dropdown,
+                        .simple_sync_dashboard .o_field_selection select{
+                            background:#0b1022 !important;
+                            color:#ffffff !important;
+                            border:1px solid #252a45 !important;
+                            border-radius:10px !important;
+                            padding:6px 10px !important;
+                            min-width:100px !important;
+                        }
+                        .simple_sync_dashboard select option,
+                        .simple_sync_dashboard .o_field_selection option{
+                            background:#0b1022 !important;
+                            color:#ffffff !important;
+                        }
+                        .simple_sync_dashboard .o_select_menu,
+                        .simple_sync_dashboard .o_select_menu_menu{
+                            background:#0b1022 !important;
+                            border:1px solid #252a45 !important;
+                            border-radius:10px !important;
+                            color:#ffffff !important;
+                            overflow:hidden !important;
+                        }
+                        .simple_sync_dashboard .o_select_menu_item,
+                        .simple_sync_dashboard .o_select_menu_item_label{
+                            background:#0b1022 !important;
+                            color:#ffffff !important;
+                        }
+                        .simple_sync_dashboard .o_select_menu_item:hover{
+                            background:#1e293b !important;
+                        }
+                        /* Align inline fields properly */
+                        .simple_sync_dashboard .sv-inline .o_field_widget{
+                            display:inline-flex !important;
+                            align-items:center !important;
+                        }
+                        .simple_sync_dashboard .sv-inline input{
+                            border-radius:10px !important;
+                            padding:6px 10px !important;
+                        }
                     </style>
                     <div class="toolbar">
                         <button name="action_run_sync" type="object" class="btn btn-ghost" string="Start Manual Sync"/>
-                        <button name="action_syncvision_save_settings" type="object" class="btn btn-primary" string="Save Settings"/>
-                        <button name="action_refresh_panel" type="object" class="btn btn-primary" string="Refresh Panel"/>
+                        <button name="action_syncvision_save_settings"
+                                    type="object"
+                                    class="btn"
+                                    string="💾 Save Settings"
+                        />
+                        
+                        <button name="action_refresh_panel" type="object" class="btn btn-primary" string="🔄 Refresh Panel"/>
                     </div>
                 </header>
                 <sheet>
@@ -275,18 +325,37 @@
                                 </div>
                             </div>
 
-                            <div class="sv-card">
-                                <h4>Stock Mapping</h4>
-                                <small>Map API quantities to Odoo quantities. One rule per line: min,max,qty (blank max = no upper bound).</small>
-                                <div class="sv-inline" style="margin-top:6px;">
-                                    <span class="sv-chip">0 to 30 → 0</span>
-                                    <span class="sv-chip">30 to 50 → 2</span>
-                                    <span class="sv-chip">50 to 200 → 5</span>
-                                    <span class="sv-chip">200+ → 10</span>
-                                    <button name="action_syncvision_apply_default_mapping" type="object" class="btn btn-ghost" style="padding:6px 10px;font-size:12px;border-radius:12px;">Use recommended</button>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                                <div class="sv-card">
+                                    <h4>Stock Mapping</h4>
+                                    <small>Map API quantities to Odoo quantities. One rule per line: min,max,qty (blank max = no upper bound).</small>
+                                    <div class="sv-inline" style="margin-top:6px;">
+                                        <span class="sv-chip">0 to 30 → 0</span>
+                                        <span class="sv-chip">30 to 50 → 2</span>
+                                        <span class="sv-chip">50 to 200 → 5</span>
+                                        <span class="sv-chip">200+ → 10</span>
+                                        <button name="action_syncvision_apply_default_mapping" type="object" class="btn btn-ghost" style="padding:6px 10px;font-size:12px;border-radius:12px;">Use recommended</button>
+                                    </div>
+                                    <div style="margin-top:10px;">
+                                        <field name="sync_stock_mapping_text" placeholder="0,30,0&#10;30,50,2&#10;50,200,5&#10;200,,10" class="sv-textarea"/>
+                                    </div>
                                 </div>
-                                <div style="margin-top:10px;">
-                                    <field name="sync_stock_mapping_text" placeholder="0,30,0&#10;30,50,2&#10;50,200,5&#10;200,,10" class="sv-textarea"/>
+                                <div class="sv-card">
+                                    <h4>API Field Mapping</h4>
+                                    <small>Configure which fields from your API response contain the SKU and stock quantity.</small>
+                                    <div style="margin-top:12px;">
+                                        <div style="margin-bottom:10px;">
+                                            <label for="sync_api_sku_field" style="font-size:12px;color:#94a3b8;display:block;margin-bottom:4px;">SKU Field Name</label>
+                                            <field name="sync_api_sku_field" placeholder="sku" class="input" style="width:100%;"/>
+                                        </div>
+                                        <div>
+                                            <label for="sync_api_stock_field" style="font-size:12px;color:#94a3b8;display:block;margin-bottom:4px;">Stock Quantity Field Name</label>
+                                            <field name="sync_api_stock_field" placeholder="qty" class="input" style="width:100%;"/>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:10px;padding:8px 10px;background:#0b0f1d;border:1px solid #2b3152;border-radius:8px;">
+                                        <small style="color:#94a3b8;">Example: If your API returns <code style="color:#60a5fa;">{"product_code": "ABC", "qty": 50}</code>, set SKU Field to <code style="color:#60a5fa;">product_code</code> and Stock Field to <code style="color:#60a5fa;">qty</code></small>
+                                    </div>
                                 </div>
                             </div>
 
@@ -309,13 +378,10 @@
                                 <div class="sv-card">
                                     <h4>Cron Interval</h4>
                                     <small>Auto-sync cadence and activation.</small>
-                                    <div class="sv-inline">
-                                        <field name="sync_cron_interval_number" class="oe_inline" style="width:70px;"/>
+                                    <div class="sv-cron-row">
+                                        <field name="sync_cron_interval_number" class="oe_inline" style="width:35px !important;"/>
                                         <field name="sync_cron_interval_type" class="oe_inline"/>
-                                        <div style="margin-left:12px; display:flex; align-items:center; gap:6px;">
-                                            <span style="font-size:12px;color:#cbd5e1;">Active</span>
-                                            <field name="sync_cron_active" class="oe_inline"/>
-                                        </div>
+                                        <span style="font-size:12px;color:#cbd5e1;display:flex;align-items:center;gap:6px;margin-left:8px;">Active <field name="sync_cron_active" class="oe_inline" style="margin:0;"/></span>
                                     </div>
                                 </div>
                             </div>

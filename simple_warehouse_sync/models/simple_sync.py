@@ -82,6 +82,10 @@ class SimpleWarehouseSync(models.Model):
         store=False,
     )
     sync_cron_active = fields.Boolean(string="Enable Auto-sync", compute="_compute_settings", inverse="_inverse_sync_cron_active", readonly=False, store=False)
+    
+    # API field mapping (configurable field names from external API)
+    sync_api_sku_field = fields.Char(string="API SKU Field", compute="_compute_settings", inverse="_inverse_sync_api_sku_field", readonly=False, store=False, help="Field name in API response for product SKU (default: sku)")
+    sync_api_stock_field = fields.Char(string="API Stock Field", compute="_compute_settings", inverse="_inverse_sync_api_stock_field", readonly=False, store=False, help="Field name in API response for stock quantity (default: southbayStock)")
 
     # Temporary storage for pending changes (not persisted until Save button is clicked)
     _pending_settings = {}
@@ -202,6 +206,10 @@ class SimpleWarehouseSync(models.Model):
             
             cron_active_str = blob.get("cron_active") if "cron_active" in blob else icp.get_param("simple_warehouse_sync.cron_active", "True")
             rec.sync_cron_active = str(cron_active_str).lower() in ("true", "1", "yes")
+            
+            # API field mapping
+            rec.sync_api_sku_field = blob.get("api_sku_field") or icp.get_param("simple_warehouse_sync.api_sku_field") or "sku"
+            rec.sync_api_stock_field = blob.get("api_stock_field") or icp.get_param("simple_warehouse_sync.api_stock_field") or "southbayStock"
 
     # Inverse methods - store pending changes in record cache until Save button is clicked
     def _get_pending_key(self, field_name):
@@ -278,6 +286,14 @@ class SimpleWarehouseSync(models.Model):
         for rec in self:
             rec._set_pending('sync_cron_active', rec.sync_cron_active)
 
+    def _inverse_sync_api_sku_field(self):
+        for rec in self:
+            rec._set_pending('sync_api_sku_field', rec.sync_api_sku_field)
+
+    def _inverse_sync_api_stock_field(self):
+        for rec in self:
+            rec._set_pending('sync_api_stock_field', rec.sync_api_stock_field)
+
     def _persist_settings_from_form(self):
         """Save all form values to system parameters at once (only called when Save button is clicked)."""
         self.ensure_one()
@@ -348,6 +364,8 @@ class SimpleWarehouseSync(models.Model):
                 "cron_interval_number": 1,
                 "cron_interval_type": "days",
                 "cron_active": "True",
+                "api_sku_field": "sku",
+                "api_stock_field": "southbayStock",
             }
         
         # Build new blob from form values - take ALL values from the form with sensible fallbacks
@@ -414,6 +432,23 @@ class SimpleWarehouseSync(models.Model):
         cron_active_bool = _to_bool(cron_active_val, default=_to_bool(current_blob.get("cron_active", "True")))
         new_blob["cron_active"] = "True" if cron_active_bool else "False"
         
+        # API field mapping - these should always have a value (default to sku/southbayStock)
+        api_sku_field_val = _get_payload_value("sync_api_sku_field", None)
+        _logger.debug("SyncVision: api_sku_field_val from payload = %r", api_sku_field_val)
+        if api_sku_field_val is not None and str(api_sku_field_val).strip():
+            new_blob["api_sku_field"] = str(api_sku_field_val).strip()
+        else:
+            new_blob["api_sku_field"] = current_blob.get("api_sku_field") or "sku"
+        
+        api_stock_field_val = _get_payload_value("sync_api_stock_field", None)
+        _logger.debug("SyncVision: api_stock_field_val from payload = %r", api_stock_field_val)
+        if api_stock_field_val is not None and str(api_stock_field_val).strip():
+            new_blob["api_stock_field"] = str(api_stock_field_val).strip()
+        else:
+            new_blob["api_stock_field"] = current_blob.get("api_stock_field") or "southbayStock"
+        
+        _logger.info("SyncVision: Saving blob with api_sku_field=%s, api_stock_field=%s", new_blob["api_sku_field"], new_blob["api_stock_field"])
+        
         # Save the complete blob
         icp.set_param(SETTINGS_BLOB_KEY, json.dumps(new_blob))
         
@@ -429,6 +464,8 @@ class SimpleWarehouseSync(models.Model):
         icp.set_param("simple_warehouse_sync.cron_interval_number", str(new_blob["cron_interval_number"]))
         icp.set_param("simple_warehouse_sync.cron_interval_type", new_blob["cron_interval_type"])
         icp.set_param("simple_warehouse_sync.cron_active", new_blob["cron_active"])
+        icp.set_param("simple_warehouse_sync.api_sku_field", new_blob["api_sku_field"])
+        icp.set_param("simple_warehouse_sync.api_stock_field", new_blob["api_stock_field"])
         
         _logger.info("SyncVision: Settings saved successfully")
         
@@ -669,6 +706,14 @@ class SimpleWarehouseSync(models.Model):
             rec.latest_api_status_code = latest_log.api_status_code if latest_log else False
             rec.latest_api_latency_ms = latest_log.api_latency_ms if latest_log else False
 
+    def _get_api_field_names(self):
+        """Get the configurable API field names for SKU and stock quantity."""
+        icp = self.env["ir.config_parameter"].sudo()
+        blob = self._get_settings_blob()
+        sku_field = blob.get("api_sku_field") or icp.get_param("simple_warehouse_sync.api_sku_field") or "sku"
+        stock_field = blob.get("api_stock_field") or icp.get_param("simple_warehouse_sync.api_stock_field") or "southbayStock"
+        return sku_field, stock_field
+
     @api.model
     def run_sync(self):
         """Run a full stock sync from the external API."""
@@ -678,6 +723,7 @@ class SimpleWarehouseSync(models.Model):
         Line = self.env["simple.warehouse.sync.line"].sudo()
         missing_prefixes = self._get_missing_prefixes()
         low_stock_threshold = self._get_low_stock_threshold()
+        sku_field, stock_field = self._get_api_field_names()
 
         # Determine main internal location
         try:
@@ -754,11 +800,11 @@ class SimpleWarehouseSync(models.Model):
 
         for item in data:
             try:
-                sku = (item.get("sku") or "").strip()
+                sku = (item.get(sku_field) or "").strip()
                 if not sku:
                     continue
 
-                api_qty = float(item.get("southbayStock") or 0.0)
+                api_qty = float(item.get(stock_field) or 0.0)
 
                 # Normalized-SKU lookup
                 norm_sku = self._normalize_sku(sku)

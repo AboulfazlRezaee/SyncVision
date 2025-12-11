@@ -4,432 +4,244 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SyncVision - Advanced Warehouse Synchronization Module</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .container {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 3px solid #667eea;
-        }
-        .header h1 {
-            color: #667eea;
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .header .tagline {
-            font-size: 1.3em;
-            color: #666;
-            font-weight: 300;
-        }
-        .version-badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-        .intro {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-            border-left: 5px solid #667eea;
-        }
-        .intro p {
-            font-size: 1.15em;
-            margin: 0;
-            color: #555;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        .section h2 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 25px;
-        }
-        .feature-card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-        }
-        .feature-card h3 {
-            color: #667eea;
-            font-size: 1.4em;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-        }
-        .feature-card .icon {
-            font-size: 1.8em;
-            margin-right: 12px;
-        }
-        .feature-card p {
-            color: #666;
-            margin: 0;
-            line-height: 1.7;
-        }
-        .feature-card ul {
-            margin: 10px 0 0 0;
-            padding-left: 20px;
-            color: #666;
-        }
-        .feature-card ul li {
-            margin-bottom: 8px;
-        }
-        .benefits {
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-            padding: 30px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-        .benefits h3 {
-            color: #2c3e50;
-            font-size: 1.6em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .benefits ul {
-            list-style: none;
-            padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .benefits ul li {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-        }
-        .benefits ul li:before {
-            content: '✓';
-            color: #10b981;
-            font-weight: bold;
-            font-size: 1.5em;
-            margin-right: 12px;
-        }
-        .use-cases {
-            background: #fff3cd;
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 5px solid #ffc107;
-            margin-top: 30px;
-        }
-        .use-cases h3 {
-            color: #856404;
-            margin-bottom: 15px;
-        }
-        .use-cases ul {
-            color: #856404;
-            margin: 0;
-            padding-left: 25px;
-        }
-        .use-cases ul li {
-            margin-bottom: 10px;
-        }
-        .tech-specs {
-            background: #e7f3ff;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-        .tech-specs h3 {
-            color: #0066cc;
-            margin-bottom: 15px;
-        }
-        .tech-specs table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .tech-specs table td {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-        .tech-specs table td:first-child {
-            font-weight: bold;
-            color: #0066cc;
-            width: 30%;
-        }
-        .cta {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 40px;
-        }
-        .cta h3 {
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-        .cta p {
-            font-size: 1.2em;
-            margin-bottom: 25px;
-        }
-        .cta-button {
-            display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 15px 40px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-        }
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
-        }
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
-            color: #999;
-        }
-        .highlight {
-            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🔄 SyncVision</h1>
-            <p class="tagline">Advanced Warehouse Synchronization Module for Odoo</p>
-            <span class="version-badge">Version 18.0.15.2.0</span>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh; box-sizing: border-box;">
+    <div style="background: #ffffff; border-radius: 20px; padding: 50px;">
+        
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 50px; padding-bottom: 40px; border-bottom: 3px solid #667eea;">
+            <h1 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 3.5em; margin-bottom: 10px; font-weight: 800;">SyncVision</h1>
+            <p style="font-size: 1.4em; color: #64748b; margin-bottom: 15px;">FAST. SIMPLE. SYNC</p>
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+                <span style="display: inline-block; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9em; font-weight: 600; background: linear-gradient(135deg, #714B67 0%, #8F5C7C 100%);">Odoo 18.0</span>
+                <span style="display: inline-block; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9em; font-weight: 600; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">Version 18.0.15.0</span>
+            </div>
         </div>
 
-        <div class="intro">
-            <p>
-                <strong>SyncVision</strong> is a powerful Odoo module designed to seamlessly synchronize your external warehouse 
-                data with Odoo inventory in real-time. Keep your stock levels accurate, monitor low inventory, 
-                and automate your entire warehouse-to-Odoo integration process with comprehensive logging and intelligent reporting.
-            </p>
+        <!-- Intro -->
+        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; margin-bottom: 50px; border-left: 5px solid #667eea;">
+            <p style="font-size: 1.2em; margin: 0; color: #475569; line-height: 1.8;"><strong>SyncVision</strong> is a powerful Odoo module designed to seamlessly synchronize your external warehouse data with Odoo inventory in real-time. Keep your stock levels accurate, monitor low inventory, and automate your entire warehouse-to-Odoo integration process with comprehensive logging and intelligent reporting.</p>
         </div>
 
-        <div class="section">
-            <h2>🚀 Key Features</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3><span class="icon">🔄</span> Real-Time Synchronization</h3>
-                    <p>Automatically sync warehouse data with Odoo inventory, ensuring your stock levels are always accurate and up-to-date.</p>
-                    <ul>
-                        <li>Manual one-click sync trigger</li>
-                        <li>Automated scheduled synchronization via cron jobs</li>
-                        <li>Real-time data refresh and panel updates</li>
+        <!-- Key Features -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="color: #1e293b; font-size: 2em; margin-bottom: 30px; font-weight: 700;">Key Features</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 100%;">
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">&#128260;</span> Real-Time Synchronization</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Automatically sync warehouse data with Odoo inventory, ensuring your stock levels are always accurate.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                        <li style="margin-bottom: 8px;">Manual one-click sync trigger</li>
+                        <li style="margin-bottom: 8px;">Automated scheduled synchronization via cron jobs</li>
+                        <li style="margin-bottom: 8px;">Real-time data refresh and panel updates</li>
                     </ul>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">📊</span> Comprehensive Logging</h3>
-                    <p>Track every sync operation with detailed logs and monitoring capabilities.</p>
-                    <ul>
-                        <li>Complete sync history with timestamps</li>
-                        <li>Low stock alerts (products &lt; 5 units)</li>
-                        <li>Missing products tracking</li>
-                        <li>Unpublished products monitoring</li>
-                        <li>High stock products overview (≥ 5 units)</li>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">&#128202;</span> Comprehensive Logging</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Track every sync operation with detailed logs and monitoring capabilities.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                        <li style="margin-bottom: 8px;">Complete sync history with timestamps</li>
+                        <li style="margin-bottom: 8px;">Low stock alerts (products below threshold)</li>
+                        <li style="margin-bottom: 8px;">Missing products tracking</li>
+                        <li style="margin-bottom: 8px;">Unpublished products monitoring</li>
                     </ul>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">🎯</span> Smart Product Management</h3>
-                    <p>Intelligent product handling based on warehouse rules and configurations.</p>
-                    <ul>
-                        <li>Automatic stock quantity updates</li>
-                        <li>Product publishing/unpublishing based on SKU and barcode</li>
-                        <li>Brand synchronization from external warehouse</li>
-                        <li>External ID mapping for seamless integration</li>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">&#127919;</span> Smart Product Management</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Intelligent product handling based on warehouse rules and configurations.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                        <li style="margin-bottom: 8px;">Automatic stock quantity updates</li>
+                        <li style="margin-bottom: 8px;">Product publishing/unpublishing based on SKU and barcode</li>
+                        <li style="margin-bottom: 8px;">Brand synchronization from external warehouse</li>
                     </ul>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">📧</span> Email Reporting</h3>
-                    <p>Stay informed with automated email reports after each synchronization.</p>
-                    <ul>
-                        <li>Detailed statistics and product summaries</li>
-                        <li>Customizable recipient settings</li>
-                        <li>HTML formatted reports with complete sync data</li>
-                        <li>Error notifications and alerts</li>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">&#128231;</span> Email Reporting</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Stay informed with automated email reports after each synchronization.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                        <li style="margin-bottom: 8px;">Detailed statistics and product summaries</li>
+                        <li style="margin-bottom: 8px;">Customizable recipient settings</li>
+                        <li style="margin-bottom: 8px;">HTML formatted reports</li>
                     </ul>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">🔍</span> Advanced Search & Filtering</h3>
-                    <p>Find and organize your products with powerful search and filtering tools.</p>
-                    <ul>
-                        <li>Search by SKU, brand, barcode, or external ID</li>
-                        <li>Filter by stock levels and sync dates</li>
-                        <li>Group by various criteria</li>
-                        <li>Product status filtering</li>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">&#128269;</span> Advanced Search and Filtering</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Find and organize your products with powerful search and filtering tools.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                        <li style="margin-bottom: 8px;">Search by SKU, brand, barcode, or external ID</li>
+                        <li style="margin-bottom: 8px;">Filter by stock levels and sync dates</li>
+                        <li style="margin-bottom: 8px;">Group by various criteria</li>
                     </ul>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">⚙️</span> Flexible Configuration</h3>
-                    <p>Customize the module to fit your specific business needs.</p>
-                    <ul>
-                        <li>Configurable missing products filtering by SKU prefixes</li>
-                        <li>Customizable sync schedules</li>
-                        <li>Brand-based filtering options</li>
-                        <li>Comprehensive error handling</li>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">&#9881;</span> Flexible Configuration</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Customize the module to fit your specific business needs.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                        <li style="margin-bottom: 8px;">Configurable API field names (SKU and stock fields)</li>
+                        <li style="margin-bottom: 8px;">Customizable sync schedules</li>
+                        <li style="margin-bottom: 8px;">Stock mapping rules</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <div class="benefits">
-            <h3>💡 Benefits of Using SyncVision</h3>
-            <ul>
-                <li>Eliminate manual data entry and human errors</li>
-                <li>Save time with automated synchronization</li>
-                <li>Maintain accurate inventory levels 24/7</li>
-                <li>Prevent stockouts with low stock alerts</li>
-                <li>Improve customer satisfaction with reliable stock data</li>
-                <li>Gain complete visibility over inventory management</li>
-                <li>Streamline warehouse-to-Odoo integration</li>
-                <li>Make data-driven decisions with comprehensive reports</li>
+        <!-- Benefits -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 20px; margin: 50px 0; color: white;">
+            <h3 style="font-size: 1.8em; margin-bottom: 25px; font-weight: 700;">Benefits of Using SyncVision</h3>
+            <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; font-size: 1.1em; font-weight: 500;">
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Eliminate manual data entry and human errors</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Save time with automated synchronization</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Maintain accurate inventory levels 24/7</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Prevent stockouts with low stock alerts</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Improve customer satisfaction with reliable stock data</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Gain complete visibility over inventory management</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Streamline warehouse-to-Odoo integration</li>
+                <li style="padding: 14px 0 14px 35px; position: relative;"><span style="font-weight: 700; color: #34d399; margin-right: 10px;">✓</span> Make data-driven decisions with comprehensive reports</li>
             </ul>
         </div>
 
-        <div class="section">
-            <h2>🎯 Perfect For</h2>
-            <div class="use-cases">
-                <h3>Who Should Use SyncVision?</h3>
-                <ul>
-                    <li><strong>E-commerce businesses</strong> with external warehouse management systems</li>
-                    <li><strong>Multi-channel retailers</strong> needing synchronized inventory across platforms</li>
-                    <li><strong>Wholesale distributors</strong> managing large product catalogs</li>
-                    <li><strong>Manufacturing companies</strong> with external inventory tracking</li>
-                    <li><strong>Drop-shipping businesses</strong> requiring real-time stock updates</li>
-                    <li><strong>Any business</strong> that needs reliable warehouse-to-Odoo synchronization</li>
+        <!-- Perfect For -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="color: #1e293b; font-size: 2em; margin-bottom: 30px; font-weight: 700;">Perfect For</h2>
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 30px; border-radius: 16px; border: 1px solid #fcd34d;">
+                <h3 style="color: #92400e; margin-bottom: 20px; font-size: 1.4em;">Who Should Use SyncVision?</h3>
+                <ul style="margin: 0; padding-left: 25px; color: #78350f;">
+                    <li style="margin-bottom: 12px;"><strong>E-commerce businesses</strong> with external warehouse management systems</li>
+                    <li style="margin-bottom: 12px;"><strong>Multi-channel retailers</strong> needing synchronized inventory across platforms</li>
+                    <li style="margin-bottom: 12px;"><strong>Wholesale distributors</strong> managing large product catalogs</li>
+                    <li style="margin-bottom: 12px;"><strong>Manufacturing companies</strong> with external inventory tracking</li>
+                    <li style="margin-bottom: 12px;"><strong>Drop-shipping businesses</strong> requiring real-time stock updates</li>
+                    <li style="margin-bottom: 12px;"><strong>Any business</strong> that needs reliable warehouse-to-Odoo synchronization</li>
                 </ul>
             </div>
         </div>
 
-        <div class="section">
-            <h2>🛠️ How It Works</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3><span class="icon">1️⃣</span> Connect</h3>
-                    <p>Configure your external warehouse API connection within the SyncVision settings panel.</p>
+        <!-- How It Works -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="color: #1e293b; font-size: 2em; margin-bottom: 30px; font-weight: 700;">How It Works</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 100%;">
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">1️⃣</span> Connect</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Configure your external warehouse API connection within the SyncVision settings panel.</p>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">2️⃣</span> Synchronize</h3>
-                    <p>Trigger manual sync or set up automated schedules using the built-in cron job system.</p>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">2️⃣</span> Synchronize</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Trigger manual sync or set up automated schedules using the built-in cron job system.</p>
                 </div>
-
-                <div class="feature-card">
-                    <h3><span class="icon">3️⃣</span> Monitor</h3>
-                    <p>Track all sync operations through the comprehensive Control Panel dashboard with real-time updates.</p>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #334155; margin-bottom: 15px; font-size: 1.3em;"><span style="font-size: 1.5em; margin-right: 10px;">3️⃣</span> Monitor</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Track all sync operations through the comprehensive Control Panel dashboard.</p>
                 </div>
+            </div>
+            
+            <!-- Saving Settings Note -->
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; margin-top: 25px; padding: 20px; border-radius: 16px;">
+                <h4 style="color: #92400e; margin: 0 0 15px 0; font-size: 1.2em;">Important: Saving Settings</h4>
+                <p style="color: #78350f; margin-bottom: 10px;">When configuring SyncVision, follow these steps:</p>
+                <ol style="color: #78350f; margin: 0; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;">Modify your settings (API URL, Stock Mapping, API Field Mapping, etc.)</li>
+                    <li style="margin-bottom: 8px;">Click the <strong style="color: #d97706;">Save Settings</strong> button</li>
+                    <li style="margin-bottom: 8px;">Click the <strong style="color: #2563eb;">Refresh Panel</strong> button to see your updated values</li>
+                </ol>
+                <p style="color: #92400e; margin-top: 12px; font-size: 0.9em;"><strong>Note:</strong> After saving, you must refresh the panel to reload the dashboard with your new configuration.</p>
             </div>
         </div>
 
-        <div class="tech-specs">
-            <h3>📋 Technical Specifications</h3>
-            <table>
+        <!-- API Integration -->
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 40px; border-radius: 20px; margin-top: 50px; color: white;">
+            <h3 style="color: #f8fafc; margin-bottom: 20px; font-size: 1.5em;">API Integration</h3>
+            <p style="color: #94a3b8; margin-bottom: 20px;">SyncVision connects to your external warehouse API. The API must return JSON data in the following format:</p>
+            <table style="width: 100%; background: #0a0f1a; border: 1px solid #334155; border-radius: 12px; border-collapse: collapse;">
                 <tr>
-                    <td>Module Name:</td>
-                    <td>SyncVision (simple_warehouse_sync)</td>
+                    <td style="padding: 25px; font-family: Consolas, Monaco, monospace; font-size: 0.95em; color: #e2e8f0; background: #0a0f1a; border-radius: 12px;">
+<span style="color: #cbd5e1;">{</span><br/>
+&nbsp;&nbsp;<span style="color: #60a5fa;">"success"</span>: <span style="color: #f472b6;">true</span>,<br/>
+&nbsp;&nbsp;<span style="color: #60a5fa;">"data"</span>: [<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #60a5fa;">"sku"</span>: <span style="color: #34d399;">"PRODUCT-SKU-001"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #60a5fa;">"southbayStock"</span>: <span style="color: #fbbf24;">150</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #60a5fa;">"brand"</span>: <span style="color: #34d399;">"BrandName"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #60a5fa;">"itemNumber"</span>: <span style="color: #34d399;">"EXT-12345"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #60a5fa;">"barcode"</span>: <span style="color: #34d399;">"1234567890123"</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;]<br/>
+<span style="color: #cbd5e1;">}</span>
+                    </td>
                 </tr>
+            </table>
+            <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 1px solid #475569; margin-top: 20px; padding: 20px; border-radius: 16px;">
+                <h4 style="color: #f8fafc; margin: 0 0 15px 0; font-size: 1.2em;">Configurable Field Names</h4>
+                <p style="color: #94a3b8; margin-bottom: 12px;">The SKU and stock quantity field names are fully configurable! If your API uses different field names, simply update them in the settings.</p>
+                <ul style="color: #cbd5e1; margin: 0; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;"><strong>SKU Field</strong> - Default: <code style="color:#60a5fa; background: #1e293b; padding: 2px 6px; border-radius: 4px;">sku</code> (configurable to match your API)</li>
+                    <li style="margin-bottom: 8px;"><strong>Stock Field</strong> - Default: <code style="color:#60a5fa; background: #1e293b; padding: 2px 6px; border-radius: 4px;">southbayStock</code> (configurable to match your API)</li>
+                </ul>
+            </div>
+            <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 1px solid #475569; margin-top: 15px; padding: 20px; border-radius: 16px;">
+                <h4 style="color: #f8fafc; margin: 0 0 15px 0; font-size: 1.2em;">Optional Fields</h4>
+                <ul style="color: #cbd5e1; margin: 0; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;"><strong>brand</strong> - Product brand name</li>
+                    <li style="margin-bottom: 8px;"><strong>itemNumber</strong> - External system ID</li>
+                    <li style="margin-bottom: 8px;"><strong>barcode</strong> - Product barcode</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Stock Mapping Configuration -->
+        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 30px; border-radius: 16px; margin-top: 40px; border: 1px solid #bbf7d0;">
+            <h3 style="color: #166534; margin-bottom: 20px; font-size: 1.5em;">Stock Mapping Configuration</h3>
+            <p style="color: #166534; margin-bottom: 15px;">Define custom rules to map external warehouse quantities to Odoo stock levels:</p>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
                 <tr>
-                    <td>Version:</td>
-                    <td>18.0.15.2.0</td>
+                    <th style="background: #166534; color: white; padding: 12px; text-align: left;">Min Qty</th>
+                    <th style="background: #166534; color: white; padding: 12px; text-align: left;">Max Qty</th>
+                    <th style="background: #166534; color: white; padding: 12px; text-align: left;">Odoo Stock</th>
+                    <th style="background: #166534; color: white; padding: 12px; text-align: left;">Description</th>
                 </tr>
-                <tr>
-                    <td>Category:</td>
-                    <td>Inventory Management</td>
-                </tr>
-                <tr>
-                    <td>License:</td>
-                    <td>OPL-1 (Odoo Proprietary License)</td>
-                </tr>
-                <tr>
-                    <td>Dependencies:</td>
-                    <td>web, stock</td>
-                </tr>
-                <tr>
-                    <td>Author:</td>
-                    <td>Abolfazl Rezaei</td>
-                </tr>
-                <tr>
-                    <td>Odoo Version:</td>
-                    <td>18.0</td>
-                </tr>
-                <tr>
-                    <td>Price:</td>
-                    <td>€69.00</td>
-                </tr>
+                <tr><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">0</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">0</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">0</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">Out of stock</td></tr>
+                <tr><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">0</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">30</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">0</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">Very low stock - show as unavailable</td></tr>
+                <tr><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">30</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">50</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">2</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">Low stock - limited availability</td></tr>
+                <tr><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">50</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">200</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">5</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">Normal stock</td></tr>
+                <tr><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">200</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">Infinity</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">10</td><td style="padding: 12px; border-bottom: 1px solid #bbf7d0; color: #14532d;">High stock - plenty available</td></tr>
+            </table>
+            <p style="margin-top: 15px; font-size: 0.95em; color: #166534;">Rules are fully customizable from the Control Panel dashboard.</p>
+        </div>
+
+        <!-- Technical Specifications -->
+        <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 30px; border-radius: 16px; margin-top: 40px; border: 1px solid #bfdbfe;">
+            <h3 style="color: #1e40af; margin-bottom: 20px; font-size: 1.5em;">Technical Specifications</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Module Name:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">SyncVision (simple_warehouse_sync)</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Version:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">18.0.15.0</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Category:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">Inventory Management</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">License:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">OPL-1 (Odoo Proprietary License)</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Dependencies:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">web, stock</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Author:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">Abolfazl Rezaei</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Odoo Version:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">18.0</td></tr>
+                <tr><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; font-weight: 600; color: #1e40af; width: 35%;">Price:</td><td style="padding: 14px 12px; border-bottom: 1px solid #bfdbfe; color: #334155;">€69.00</td></tr>
             </table>
         </div>
 
-        <div class="section">
-            <h2>✨ What's Included</h2>
-            <div class="feature-card">
-                <ul>
-                    <li>✅ Complete SyncVision module installation</li>
-                    <li>✅ Control Panel dashboard for monitoring</li>
-                    <li>✅ Automated cron job configuration</li>
-                    <li>✅ Email notification templates</li>
-                    <li>✅ Sync history and logging system</li>
-                    <li>✅ Product management views and filters</li>
-                    <li>✅ Custom JavaScript widgets for circular animations</li>
-                    <li>✅ Security access controls (CSV)</li>
-                    <li>✅ Complete documentation</li>
+        <!-- What is Included -->
+        <div style="margin-bottom: 50px; margin-top: 50px;">
+            <h2 style="color: #1e293b; font-size: 2em; margin-bottom: 30px; font-weight: 700;">What is Included</h2>
+            <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                    <li style="margin-bottom: 8px;">Complete SyncVision module installation</li>
+                    <li style="margin-bottom: 8px;">Control Panel dashboard for monitoring</li>
+                    <li style="margin-bottom: 8px;">Automated cron job configuration</li>
+                    <li style="margin-bottom: 8px;">Email notification templates</li>
+                    <li style="margin-bottom: 8px;">Sync history and logging system</li>
+                    <li style="margin-bottom: 8px;">Product management views and filters</li>
+                    <li style="margin-bottom: 8px;">Security access controls</li>
+                    <li style="margin-bottom: 8px;">Complete documentation</li>
                 </ul>
             </div>
         </div>
 
-        <div class="cta">
-            <h3>Ready to Transform Your Inventory Management?</h3>
-            <p>Get SyncVision today and experience seamless warehouse synchronization!</p>
-            <p style="font-size: 0.9em; margin-top: 20px;">Perfect for businesses that need reliable warehouse-to-Odoo synchronization with complete visibility and control.</p>
-        </div>
-
-        <div class="footer">
-            <p>© 2025 SyncVision by Abolfazl Rezaei | Advanced Warehouse Synchronization for Odoo</p>
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #e2e8f0; color: #64748b;">
+            <p>SyncVision by Abolfazl Rezaei | FAST. SIMPLE. SYNC</p>
             <p style="margin-top: 10px; font-size: 0.9em;">For support and inquiries, please contact the module author.</p>
         </div>
     </div>

@@ -61,6 +61,11 @@
         "views/simple_sync_line_views.xml",
         "data/cron.xml",
     ],
+    'images': [
+        "static/description/main_1_screenshot.png",
+        "static/description/main_1-2_screenshot.png",
+    ],
+
     "assets": {
         "web.assets_backend": [
             "simple_warehouse_sync/static/src/js/syncvision_circle.js",
