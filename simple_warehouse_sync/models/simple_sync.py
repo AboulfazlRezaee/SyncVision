@@ -852,11 +852,11 @@ class SimpleWarehouseSync(models.Model):
                     Quant._update_available_quantity(product, main_location, diff)
                     updated += 1
 
-                # Publish/unpublish based on having BOTH SKU and barcode
+                # Publish/unpublish based on having BOTH SKU and barcode when website field is available
                 tmpl = product.product_tmpl_id
                 has_sku = self._has_identifier(product.default_code)
                 has_barcode = self._has_identifier(product.barcode)
-                if tmpl:
+                if tmpl and hasattr(tmpl, "website_published"):
                     tmpl.website_published = bool(has_sku and has_barcode)
 
                 # Build per-product status flags and note

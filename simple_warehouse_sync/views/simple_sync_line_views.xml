@@ -68,7 +68,7 @@
                 <filter name="only_missing" string="Missing Products" domain="[('missing','=',True)]"/>
                 <filter name="only_unpublished" string="Unpublished" domain="[('unpublished','=',True)]"/>
                 <separator/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter name="group_by_brand" string="Brand" context="{'group_by':'brand'}"/>
                     <filter name="group_by_missing" string="Missing" context="{'group_by':'missing'}"/>
                     <filter name="group_by_date" string="Sync Date" context="{'group_by':'create_date:day'}"/>
