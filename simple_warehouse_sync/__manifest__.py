@@ -1,6 +1,6 @@
 {
     "name": "SyncVision",
-    "version": "18.0.15.0",
+    "version": "19.0.15.0",
     "description": """
         SyncVision - Advanced Warehouse Synchronization Module
 
