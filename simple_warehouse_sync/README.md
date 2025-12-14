@@ -1,9 +1,9 @@
 # SyncVision
 
-**Advanced Warehouse Synchronization Module for Odoo 18**
+**Advanced Warehouse Synchronization Module for Odoo 19**
 
-[![Odoo Version](https://img.shields.io/badge/Odoo-18.0-purple.svg)](https://www.odoo.com)
-[![License](https://img.shields.io/badge/License-OPL--1-blue.svg)](https://www.odoo.com/documentation/18.0/legal/licenses.html)
+[![Odoo Version](https://img.shields.io/badge/Odoo-19.0-purple.svg)](https://www.odoo.com)
+[![License](https://img.shields.io/badge/License-OPL--1-blue.svg)](https://www.odoo.com/documentation/19.0/legal/licenses.html)
 [![Author](https://img.shields.io/badge/Author-Abolfazl%20Rezaei-green.svg)](https://github.com/abolfazlrezaei)
 
 ---
@@ -61,7 +61,7 @@
 ## Installation
 
 ### Prerequisites
-- Odoo 18.0
+- Odoo 19.0
 - Python 3.10+
 - `requests` library (included in Odoo dependencies)
 
@@ -276,4 +276,4 @@ grep "SimpleWarehouseSync" /var/log/odoo/odoo.log
 
 This module is licensed under the **Odoo Proprietary License v1.0 (OPL-1)**.
 
-See [Odoo Licensing](https://www.odoo.com/documentation/18.0/legal/licenses.html) for more details.
+See [Odoo Licensing](https://www.odoo.com/documentation/19.0/legal/licenses.html) for more details.
