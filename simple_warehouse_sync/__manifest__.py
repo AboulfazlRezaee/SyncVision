@@ -52,7 +52,7 @@
     "author": "Abolfazl Rezaei",
     "category": "Inventory",
     "license": "OPL-1",
-    "price": 69.0,
+    "price": 85.0,
     "currency": "EUR",
     "depends": ["web", "stock"],
     "data": [
